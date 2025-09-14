@@ -10,5 +10,12 @@ if [ -z "$PORT" ]; then
   PORT=3000
 fi
 
+# Run migrations if in production
+if [ "$RAILS_ENV" = "production" ]; then
+  echo "Running database migrations..."
+  bundle exec rails db:migrate
+  echo "Migrations complete"
+fi
+
 echo "Starting server on port $PORT"
 exec bundle exec rails server -b 0.0.0.0 -p $PORT
