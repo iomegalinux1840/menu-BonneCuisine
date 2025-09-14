@@ -23,6 +23,7 @@ RUN apt-get update -qq && \
     git \
     libpq-dev \
     libvips \
+    libyaml-dev \
     pkg-config \
     nodejs \
     npm && \
