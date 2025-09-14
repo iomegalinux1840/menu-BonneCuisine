@@ -111,8 +111,8 @@ body {
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem 2rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem 1.5rem;
   max-width: 1600px;
   margin: 0 auto;
   padding: 0 2rem;
@@ -121,16 +121,30 @@ body {
     opacity: 0.7;
     transition: opacity 0.3s ease;
   }
+
+  // Responsive design
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
 }
 
 .menu-item {
   background: white;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1.25rem;
   box-shadow: var(--shadow);
   transition: all 0.3s ease;
   border: 1px solid var(--border-light);
-  min-height: 200px;
+  min-height: 180px;
   display: flex;
   flex-direction: column;
 
@@ -150,7 +164,7 @@ body {
 
 .menu-item-name {
   font-family: 'Playfair Display', serif;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   color: var(--primary-blue);
   font-weight: 700;
   flex: 1;
@@ -159,13 +173,13 @@ body {
 
 .menu-item-price {
   font-weight: 700;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   color: var(--dark-blue);
   white-space: nowrap;
 }
 
 .menu-item-description {
-  font-size: 1.05rem;
+  font-size: 1rem;
   line-height: 1.4;
   color: var(--text-dark);
   margin-bottom: 0.8rem;
@@ -173,7 +187,7 @@ body {
 }
 
 .menu-item-comment {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   margin-top: auto;
   font-style: italic;
   color: var(--text-muted);
