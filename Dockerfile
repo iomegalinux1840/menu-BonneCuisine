@@ -33,11 +33,28 @@ COPY . .
 # Precompile assets
 RUN SECRET_KEY_BASE=dummy bundle exec rails assets:precompile
 
-# Create and migrate database
-RUN bundle exec rails db:create db:migrate db:seed || true
-
 # Expose port
 EXPOSE 3000
 
+# Create entrypoint script
+RUN echo '#!/bin/sh\n\
+set -e\n\
+\n\
+# Run database migrations if DATABASE_URL is set\n\
+if [ -n "$DATABASE_URL" ]; then\n\
+  echo "Running database migrations..."\n\
+  bundle exec rails db:migrate || true\n\
+  \n\
+  # Only seed if SEED_DATABASE is set to true\n\
+  if [ "$SEED_DATABASE" = "true" ]; then\n\
+    echo "Seeding database..."\n\
+    bundle exec rails db:seed || true\n\
+  fi\n\
+fi\n\
+\n\
+# Start the Rails server\n\
+exec bundle exec rails server -b 0.0.0.0 -p ${PORT:-3000}\n\
+' > /rails/entrypoint.sh && chmod +x /rails/entrypoint.sh
+
 # Start server
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+CMD ["/rails/entrypoint.sh"]
