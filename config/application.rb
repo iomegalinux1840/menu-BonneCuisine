@@ -19,6 +19,10 @@ module MenuBonneCuisine
     config.time_zone = 'Paris'
     # config.eager_load_paths << Rails.root.join("extras")
 
+    # Add lib directory to autoload paths for constraints
+    config.autoload_paths << Rails.root.join('lib')
+    config.eager_load_paths << Rails.root.join('lib')
+
     # ActionCable configuration
     config.action_cable.mount_path = '/cable'
     config.action_cable.url = 'ws://localhost:3000/cable'

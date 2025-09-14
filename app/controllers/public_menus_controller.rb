@@ -1,3 +1,5 @@
+require_relative 'concerns/current_tenant'
+
 class PublicMenusController < ApplicationController
   include CurrentTenant
 

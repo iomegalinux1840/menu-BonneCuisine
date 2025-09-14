@@ -1,4 +1,23 @@
-require 'constraints/subdomain_constraint'
+# Define constraints inline to avoid autoloading issues
+class SubdomainConstraint
+  def self.matches?(request)
+    return false if request.subdomain.blank?
+    reserved = %w[www admin api app assets help support docs]
+    !reserved.include?(request.subdomain)
+  end
+end
+
+class AdminSubdomainConstraint
+  def self.matches?(request)
+    request.subdomain == 'admin'
+  end
+end
+
+class NoSubdomainConstraint
+  def self.matches?(request)
+    request.subdomain.blank? || request.subdomain == 'www'
+  end
+end
 
 Rails.application.routes.draw do
   # Mount ActionCable for all domains
