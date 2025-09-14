@@ -2,7 +2,13 @@
 
 # If running the rails server then create or migrate existing database
 if [ "${*}" == "./bin/rails server -b 0.0.0.0" ]; then
-  ./bin/rails db:prepare
+  # Only run migrations if DATABASE_URL is set
+  if [ -n "$DATABASE_URL" ]; then
+    echo "Running database migrations..."
+    ./bin/rails db:prepare
+  else
+    echo "DATABASE_URL not set, skipping database setup"
+  fi
 fi
 
 exec "${@}"
