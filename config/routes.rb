@@ -66,6 +66,9 @@ Rails.application.routes.draw do
   constraints NoSubdomainConstraint do
     root 'landing#index', as: :main_root
 
+    # Debug route to check restaurants
+    get 'debug/restaurants', to: 'application#debug_restaurants'
+
     # Path-based restaurant access (e.g., menuplatform.app/r/restaurant-slug)
     get 'r/:restaurant_slug', to: 'public_menus#index', as: :restaurant_path
 
