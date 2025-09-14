@@ -25,7 +25,7 @@
                 <br><small class="text-muted"><%= truncate(menu_item.description, length: 100) %></small>
               <% end %>
             </td>
-            <td><%= number_to_currency(menu_item.price, unit: "€", precision: 2, format: "%n%u") %></td>
+            <td><%= number_to_currency(menu_item.price, unit: "$", precision: 2, locale: :en) %></td>
             <td>
               <%= button_to toggle_availability_admin_menu_item_path(menu_item),
                     method: :patch,

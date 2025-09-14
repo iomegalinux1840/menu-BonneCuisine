@@ -1,7 +1,7 @@
 <div class="menu-item" data-menu-item-id="<%= menu_item.id %>">
   <div class="menu-item-header">
     <h3 class="menu-item-name"><%= menu_item.name %></h3>
-    <span class="menu-item-price"><%= number_to_currency(menu_item.price, unit: "€", precision: 2, format: "%n%u") %></span>
+    <span class="menu-item-price"><%= number_to_currency(menu_item.price, unit: "$", precision: 2, locale: :en) %></span>
   </div>
 
   <% if menu_item.description.present? %>

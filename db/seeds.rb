@@ -1,106 +1,122 @@
+# Clear existing data
+Admin.destroy_all
+MenuItem.destroy_all
+
 # Create admin user
 admin = Admin.create!(
-  email: "admin@labonnecuisine.fr",
-  password: "password123",
-  password_confirmation: "password123"
+  email: 'admin@labonnecuisine.ca',
+  password: 'password123',
+  password_confirmation: 'password123'
 )
 
 puts "Admin créé: #{admin.email}"
 
-# Create menu items
+# Create French Canadian fast food menu items
 menu_items = [
   {
-    name: "Soupe à l'oignon gratinée",
-    description: "Soupe traditionnelle à l'oignon caramélisé, gratinée au fromage Gruyère et servie avec des croûtons dorés",
-    price: 14.50,
-    comment: "Spécialité de la maison • Contient: gluten, lactose",
+    name: 'Poutine Classique',
+    description: 'Frites fraîches, sauce brune maison et fromage en grains qui fait "squick squick"',
+    price: 12.99,
+    comment: 'Notre spécialité depuis 1985 • Végétarien',
+    available: true,
     position: 1
   },
   {
-    name: "Escargots de Bourgogne",
-    description: "Six escargots préparés au beurre d'ail persillé, accompagnés de pain grillé",
-    price: 16.00,
-    comment: "Préparation traditionnelle • Contient: gluten, lactose",
+    name: 'Poutine au Smoked Meat',
+    description: 'Notre poutine classique garnie de généreux morceaux de smoked meat de Montréal',
+    price: 18.99,
+    comment: 'Best-seller • Contient: gluten',
+    available: true,
     position: 2
   },
   {
-    name: "Foie gras poêlé aux figues",
-    description: "Escalope de foie gras de canard poêlée, compotée de figues et pain de campagne toasté",
-    price: 24.00,
-    comment: "Produit d'exception • Contient: gluten",
+    name: 'Hot-Dog Steamé All-Dressed',
+    description: 'Deux saucisses steamées, chou, oignons, moutarde et relish dans un pain vapeur',
+    price: 8.99,
+    comment: 'Style cabane à sucre • Contient: gluten, moutarde',
+    available: true,
     position: 3
   },
   {
-    name: "Coq au vin de Bourgogne",
-    description: "Cuisses de coq mijotées au vin rouge, lardons fumés, champignons de Paris et petits oignons grelots",
-    price: 26.00,
-    comment: "Recette traditionnelle • Contient: sulfites",
+    name: 'Burger Le Bûcheron',
+    description: 'Double bœuf Angus, bacon, fromage cheddar fort, oignons caramélisés, sauce BBQ érable',
+    price: 16.99,
+    comment: 'Bœuf local • Contient: gluten, lactose',
+    available: true,
     position: 4
   },
   {
-    name: "Bouillabaisse marseillaise",
-    description: "Soupe de poissons méditerranéens, rouille safranée, croûtons et fromage râpé",
-    price: 32.00,
-    comment: "Selon arrivage • Contient: poisson, gluten, lactose",
+    name: 'Club Sandwich Québécois',
+    description: 'Triple étage avec poulet grillé, bacon croustillant, tomates, laitue, mayo maison',
+    price: 14.99,
+    comment: 'Servi avec frites et salade de chou • Contient: gluten, œufs',
+    available: true,
     position: 5
   },
   {
-    name: "Magret de canard aux cerises",
-    description: "Magret de canard rosé, sauce aux cerises noires et gratin dauphinois",
-    price: 28.00,
-    comment: "Cuisson rosée recommandée • Contient: lactose",
+    name: 'Guédille aux Crevettes',
+    description: 'Pain hot-dog grillé rempli de crevettes nordiques, mayo citronnée et ciboulette',
+    price: 15.99,
+    comment: 'Crevettes de Matane • Contient: crustacés, gluten',
+    available: true,
     position: 6
   },
   {
-    name: "Ratatouille niçoise",
-    description: "Légumes du soleil mijotés à l'huile d'olive, herbes de Provence et riz complet",
-    price: 20.00,
-    comment: "Plat végétarien • Sans gluten",
+    name: 'Tourtière du Lac',
+    description: 'Pâté à la viande traditionnel servi avec ketchup aux fruits maison et salade verte',
+    price: 13.99,
+    comment: 'Recette de grand-maman • Contient: gluten',
+    available: true,
     position: 7
   },
   {
-    name: "Plateau de fromages affinés",
-    description: "Sélection de fromages français affinés par notre maître fromager, pain aux noix et confiture de figue",
-    price: 18.00,
-    comment: "Selon disponibilité • Contient: lactose, gluten, fruits à coque",
+    name: 'Rondelles d\'Oignon Géantes',
+    description: 'Oignons panés croustillants servis avec sauce ranch épicée',
+    price: 9.99,
+    comment: 'À partager • Végétarien',
+    available: true,
     position: 8
   },
   {
-    name: "Crème brûlée à la vanille",
-    description: "Crème onctueuse à la vanille de Madagascar, caramélisée au sucre roux",
-    price: 12.00,
-    comment: "Dessert signature • Contient: lactose, œufs",
+    name: 'Pouding Chômeur',
+    description: 'Gâteau éponge nappé de sirop d\'érable, servi chaud avec crème glacée vanille',
+    price: 7.99,
+    comment: 'Dessert réconfortant • Contient: gluten, lactose',
+    available: true,
     position: 9
   },
   {
-    name: "Tarte Tatin aux pommes",
-    description: "Tarte renversée aux pommes caramélisées, pâte brisée maison et glace vanille",
-    price: 14.00,
-    comment: "Servie tiède • Contient: gluten, lactose, œufs",
+    name: 'Queue de Castor',
+    description: 'Pâte frite étirée, cannelle et sucre, avec option Nutella ou sirop d\'érable',
+    price: 6.99,
+    comment: 'Chaud et croustillant • Contient: gluten',
+    available: true,
     position: 10
   },
   {
-    name: "Mousse au chocolat noir",
-    description: "Mousse légère au chocolat noir 70% de Madagascar, chantilly et copeaux de chocolat",
-    price: 13.00,
-    comment: "Recette grand-mère • Contient: lactose, œufs",
+    name: 'Tarte au Sucre',
+    description: 'Tarte traditionnelle au sucre brun et crème, servie avec crème fouettée',
+    price: 5.99,
+    comment: 'Fait maison • Contient: gluten, lactose',
+    available: true,
     position: 11
   },
   {
-    name: "Café gourmand",
-    description: "Expresso accompagné de trois mignardises: macaron, mini éclair et petit-four",
-    price: 11.00,
-    comment: "Parfait pour finir • Contient: gluten, lactose, œufs, fruits à coque",
+    name: 'Flotteur à la Bière d\'Épinette',
+    description: 'Bière d\'épinette Bec Cola avec boule de crème glacée vanille',
+    price: 4.99,
+    comment: 'Rafraîchissant et nostalgique • Sans alcool',
+    available: true,
     position: 12
   }
 ]
 
-menu_items.each do |item_attrs|
-  item = MenuItem.create!(item_attrs)
-  puts "Plat créé: #{item.name} - #{item.price}€"
+menu_items.each do |item|
+  menu_item = MenuItem.create!(item)
+  puts "Plat créé: #{menu_item.name} - #{menu_item.price}$"
 end
 
 puts "\n✨ Base de données initialisée avec succès!"
 puts "📧 Admin: #{admin.email}"
 puts "🔑 Mot de passe: password123"
-puts "🍽️ #{MenuItem.count} plats créés"
+puts "🍟 #{MenuItem.count} plats créés"
