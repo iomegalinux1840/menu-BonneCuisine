@@ -19,9 +19,8 @@ module MenuBonneCuisine
     config.time_zone = 'Paris'
     # config.eager_load_paths << Rails.root.join("extras")
 
-    # Add lib directory to autoload paths for constraints
-    config.autoload_paths << Rails.root.join('lib')
-    config.eager_load_paths << Rails.root.join('lib')
+    # Removed lib from autoload paths since constraints are now inline in routes.rb
+    # to avoid production autoloading issues
 
     # Configure subdomain handling for development
     config.action_dispatch.tld_length = 0 # For localhost
