@@ -1,0 +1,81 @@
+# Git
+.git
+.gitignore
+.github
+
+# Documentation
+README.md
+*.md
+
+# Logs
+log/*
+*.log
+
+# Temp files
+tmp/*
+temp/*
+
+# Test files
+test/*
+spec/*
+coverage/*
+
+# Development database
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-shm
+*.sqlite3-wal
+
+# Seeds and migrations (will be run in container)
+db/*.sqlite3
+db/*.sqlite3-*
+
+# Node modules (if any)
+node_modules/
+yarn-error.log
+npm-debug.log*
+
+# Public assets (will be compiled)
+public/assets/*
+public/packs/*
+public/packs-test/*
+
+# Storage
+storage/*
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files (sensitive)
+.env
+.env.*
+
+# Bundle
+vendor/bundle
+.bundle
+
+# Coverage reports
+coverage/
+
+# Byebug
+.byebug_history
+
+# Master key (sensitive)
+config/master.key
+config/credentials.yml.enc
+
+# Local cookies file
+cookies.txt
+
+# Docker files themselves
+Dockerfile
+docker-compose.yml
+.dockerignore
