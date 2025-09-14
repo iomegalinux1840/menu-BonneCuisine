@@ -1,9 +1,12 @@
 # Define constraints inline to avoid autoloading issues
 class SubdomainConstraint
   def self.matches?(request)
+    Rails.logger.debug "SubdomainConstraint checking: subdomain='#{request.subdomain}', host='#{request.host}'"
     return false if request.subdomain.blank?
     reserved = %w[www admin api app assets help support docs]
-    !reserved.include?(request.subdomain)
+    result = !reserved.include?(request.subdomain)
+    Rails.logger.debug "SubdomainConstraint result: #{result}"
+    result
   end
 end
 

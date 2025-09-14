@@ -23,6 +23,9 @@ module MenuBonneCuisine
     config.autoload_paths << Rails.root.join('lib')
     config.eager_load_paths << Rails.root.join('lib')
 
+    # Configure subdomain handling for development
+    config.action_dispatch.tld_length = 0 # For localhost
+
     # ActionCable configuration
     config.action_cable.mount_path = '/cable'
     config.action_cable.url = 'ws://localhost:3000/cable'
