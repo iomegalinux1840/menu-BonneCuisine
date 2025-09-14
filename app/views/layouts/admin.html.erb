@@ -7,7 +7,7 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +21,7 @@
         <% if admin_logged_in? %>
           <div class="nav-actions">
             <%= link_to "Voir le menu public", root_path, class: "btn btn-outline", target: "_blank" %>
-            <%= link_to "Déconnexion", admin_logout_path, data: { "turbo-method": :delete }, class: "btn btn-danger" %>
+            <%= button_to "Déconnexion", admin_logout_path, method: :delete, class: "btn btn-danger", form: { style: "display: inline-block;" } %>
           </div>
         <% end %>
       </div>
