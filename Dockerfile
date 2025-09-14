@@ -1,60 +1,42 @@
-# Use Ruby 3.3.8 slim image for smaller size
-FROM ruby:3.3.8-slim
+# syntax=docker/dockerfile:1
+FROM ruby:3.3.8
 
-# Install essential Linux packages
+# Install dependencies
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y \
-    build-essential \
-    git \
-    libpq-dev \
-    nodejs \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set working directory
-WORKDIR /rails
+    apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set production environment
 ENV RAILS_ENV="production" \
-    BUNDLE_WITHOUT="development:test" \
-    BUNDLE_DEPLOYMENT="1"
+    BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_PATH="/usr/local/bundle" \
+    BUNDLE_WITHOUT="development"
 
-# Install bundler
-RUN gem install bundler -v 2.7.0
+# Throw-away build stage to reduce size of final image
+WORKDIR /rails
 
-# Copy Gemfile first for better caching
+# Install application gems
 COPY Gemfile Gemfile.lock ./
-
-# Install gems
-RUN bundle install --jobs 4 --retry 3
+RUN bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
 # Copy application code
 COPY . .
 
-# Precompile assets
-RUN SECRET_KEY_BASE=dummy bundle exec rails assets:precompile
+# Precompile bootsnap code for faster boot times
+RUN bundle exec bootsnap precompile app/ lib/
 
-# Expose port
+# Precompiling assets for production without requiring secret key base
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+
+# Run and own only the runtime files as a non-root user for security
+RUN useradd rails --create-home --shell /bin/bash && \
+    chown -R rails:rails db log storage tmp
+USER rails:rails
+
+# Entrypoint prepares the database.
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+
+# Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-
-# Create entrypoint script
-RUN echo '#!/bin/sh\n\
-set -e\n\
-\n\
-# Run database migrations if DATABASE_URL is set\n\
-if [ -n "$DATABASE_URL" ]; then\n\
-  echo "Running database migrations..."\n\
-  bundle exec rails db:migrate || true\n\
-  \n\
-  # Only seed if SEED_DATABASE is set to true\n\
-  if [ "$SEED_DATABASE" = "true" ]; then\n\
-    echo "Seeding database..."\n\
-    bundle exec rails db:seed || true\n\
-  fi\n\
-fi\n\
-\n\
-# Start the Rails server\n\
-exec bundle exec rails server -b 0.0.0.0 -p ${PORT:-3000}\n\
-' > /rails/entrypoint.sh && chmod +x /rails/entrypoint.sh
-
-# Start server
-CMD ["/rails/entrypoint.sh"]
+CMD ["./bin/rails", "server"]
