@@ -40,3 +40,45 @@
     <p>&copy; <%= Date.current.year %> La Bonne Cuisine. Tous droits réservés.</p>
   </footer>
 </div>
+
+<script>
+  // ActionCable for real-time updates
+  (function() {
+    // Create WebSocket connection
+    const cable = ActionCable.createConsumer('<%= Rails.application.config.action_cable.url || "/cable" %>');
+
+    // Subscribe to MenuChannel
+    cable.subscriptions.create("MenuChannel", {
+      connected: function() {
+        console.log("Connected to MenuChannel for real-time updates");
+      },
+
+      disconnected: function() {
+        console.log("Disconnected from MenuChannel");
+      },
+
+      received: function(data) {
+        console.log("Received data:", data);
+
+        if (data.action === 'update' && data.html) {
+          // Update the entire menu grid with new HTML
+          const menuGrid = document.getElementById('menu-grid');
+          if (menuGrid) {
+            menuGrid.innerHTML = data.html;
+            menuGrid.classList.add('updating');
+            setTimeout(() => {
+              menuGrid.classList.remove('updating');
+            }, 300);
+          }
+        } else if (data.action === 'delete' && data.id) {
+          // Remove deleted item
+          const item = document.querySelector(`[data-menu-item-id="${data.id}"]`);
+          if (item) {
+            item.style.opacity = '0';
+            setTimeout(() => item.remove(), 300);
+          }
+        }
+      }
+    });
+  })();
+</script>

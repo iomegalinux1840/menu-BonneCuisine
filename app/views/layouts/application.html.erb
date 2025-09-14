@@ -7,7 +7,8 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+    <script src="https://unpkg.com/@rails/actioncable@7.0.0/app/assets/javascripts/actioncable.js"></script>
+    <%= action_cable_meta_tag %>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -8,8 +8,8 @@ class MenuItem < ApplicationRecord
 
   before_validation :set_position, on: :create
 
-  after_save :broadcast_menu_change
-  after_destroy :broadcast_menu_change
+  after_save :broadcast_menu_update
+  after_destroy :broadcast_menu_delete
 
   private
 
@@ -20,14 +20,33 @@ class MenuItem < ApplicationRecord
     self.position = last_position + 1
   end
 
-  def broadcast_menu_change
+  def broadcast_menu_update
+    # Get all available menu items
+    menu_items = MenuItem.available.ordered.limit(12)
+
+    # Render the HTML for the menu items
+    renderer = ApplicationController.renderer.new
+    html = menu_items.map do |item|
+      renderer.render(partial: 'menu_items/menu_item', locals: { menu_item: item })
+    end.join
+
+    # Broadcast the update
     ActionCable.server.broadcast(
       "menu_channel",
       {
-        type: "menu_updated",
-        menu_items: MenuItem.available.ordered.as_json(
-          only: [:id, :name, :description, :price, :comment, :available, :position]
-        )
+        action: "update",
+        html: html
+      }
+    )
+  end
+
+  def broadcast_menu_delete
+    # Just send the delete action with the ID
+    ActionCable.server.broadcast(
+      "menu_channel",
+      {
+        action: "delete",
+        id: self.id
       }
     )
   end
