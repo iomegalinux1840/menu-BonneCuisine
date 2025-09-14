@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Administration - La Bonne Cuisine</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+  </head>
+
+  <body class="admin-body">
+    <nav class="admin-nav">
+      <div class="nav-content">
+        <h1>Administration - La Bonne Cuisine</h1>
+        <% if admin_logged_in? %>
+          <div class="nav-actions">
+            <%= link_to "Voir le menu public", root_path, class: "btn btn-outline", target: "_blank" %>
+            <%= link_to "Déconnexion", admin_logout_path, data: { "turbo-method": :delete }, class: "btn btn-danger" %>
+          </div>
+        <% end %>
+      </div>
+    </nav>
+
+    <main class="admin-main">
+      <% if notice %>
+        <div class="alert alert-success"><%= notice %></div>
+      <% end %>
+
+      <% if alert %>
+        <div class="alert alert-error"><%= alert %></div>
+      <% end %>
+
+      <%= yield %>
+    </main>
+  </body>
+</html>

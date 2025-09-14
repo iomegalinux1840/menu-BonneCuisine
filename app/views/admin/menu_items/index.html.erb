@@ -1,0 +1,57 @@
+<div class="admin-content">
+  <div class="admin-header">
+    <h2>Gestion du Menu</h2>
+    <%= link_to "Ajouter un plat", new_admin_menu_item_path, class: "btn btn-primary" %>
+  </div>
+
+  <div class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>Nom</th>
+          <th>Prix</th>
+          <th>Disponible</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @menu_items.each do |menu_item| %>
+          <tr class="<%= 'unavailable' unless menu_item.available %>">
+            <td><%= menu_item.position %></td>
+            <td>
+              <strong><%= menu_item.name %></strong>
+              <% if menu_item.description.present? %>
+                <br><small class="text-muted"><%= truncate(menu_item.description, length: 100) %></small>
+              <% end %>
+            </td>
+            <td><%= number_to_currency(menu_item.price, unit: "€", precision: 2, format: "%n%u") %></td>
+            <td>
+              <%= button_to toggle_availability_admin_menu_item_path(menu_item),
+                    method: :patch,
+                    remote: true,
+                    class: "btn btn-sm #{menu_item.available? ? 'btn-success' : 'btn-warning'}",
+                    form: { class: "availability-form", data: { menu_item_id: menu_item.id } } do %>
+                <%= menu_item.available? ? "Disponible" : "Indisponible" %>
+              <% end %>
+            </td>
+            <td class="actions-cell">
+              <%= link_to "Modifier", edit_admin_menu_item_path(menu_item), class: "btn btn-sm btn-outline" %>
+              <%= link_to "Supprimer", admin_menu_item_path(menu_item),
+                    method: :delete,
+                    class: "btn btn-sm btn-danger",
+                    confirm: "Êtes-vous sûr de vouloir supprimer ce plat ?" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <% if @menu_items.empty? %>
+      <div class="empty-state">
+        <p>Aucun plat dans le menu.</p>
+        <%= link_to "Ajouter le premier plat", new_admin_menu_item_path, class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

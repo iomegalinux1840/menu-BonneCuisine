@@ -1,0 +1,53 @@
+<% if @menu_item.errors.any? %>
+  <div class="alert alert-error">
+    <h4><%= pluralize(@menu_item.errors.count, "erreur") %> empêche la sauvegarde :</h4>
+    <ul>
+      <% @menu_item.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="form-grid">
+  <div class="form-group">
+    <%= form.label :name, "Nom du plat", class: "form-label" %>
+    <%= form.text_field :name, class: "form-input", required: true %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :price, "Prix (€)", class: "form-label" %>
+    <%= form.number_field :price, step: 0.01, min: 0, class: "form-input", required: true %>
+  </div>
+
+  <div class="form-group full-width">
+    <%= form.label :description, "Description", class: "form-label" %>
+    <%= form.text_area :description, rows: 3, class: "form-textarea",
+          placeholder: "Décrivez les ingrédients et la préparation..." %>
+  </div>
+
+  <div class="form-group full-width">
+    <%= form.label :comment, "Commentaire (allergies, suggestions...)", class: "form-label" %>
+    <%= form.text_area :comment, rows: 2, class: "form-textarea",
+          placeholder: "Informations supplémentaires pour les clients..." %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :position, "Position dans le menu", class: "form-label" %>
+    <%= form.number_field :position, min: 1, class: "form-input" %>
+    <small class="form-help">Laissez vide pour placer à la fin</small>
+  </div>
+
+  <div class="form-group">
+    <div class="checkbox-group">
+      <%= form.check_box :available, class: "form-checkbox" %>
+      <%= form.label :available, "Plat disponible", class: "form-label checkbox-label" %>
+    </div>
+  </div>
+</div>
+
+<div class="form-actions">
+  <%= form.submit (@menu_item.new_record? ? "Créer le plat" : "Mettre à jour le plat"),
+        class: "btn btn-primary" %>
+  <%= link_to "Annuler", admin_menu_items_path, class: "btn btn-outline" %>
+</div>

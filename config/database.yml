@@ -1,0 +1,24 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: menu_bonne_cuisine_development
+  username: <%= ENV['DATABASE_USERNAME'] || ENV['USER'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] || '' %>
+  host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
+
+test:
+  <<: *default
+  database: menu_bonne_cuisine_test
+  username: <%= ENV['DATABASE_USERNAME'] || ENV['USER'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] || '' %>
+  host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
+
+production:
+  <<: *default
+  database: menu_bonne_cuisine_production
+  username: menu_bonne_cuisine
+  password: <%= ENV["MENU_BONNE_CUISINE_DATABASE_PASSWORD"] %>

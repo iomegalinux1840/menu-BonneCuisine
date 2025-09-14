@@ -1,0 +1,2 @@
+Logo image should be placed here as logo.png or logo.jpg
+The logo shows "La Bonne Cuisine" in blue script font with a pot/lid icon at the top
