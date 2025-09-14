@@ -41,9 +41,13 @@ Rails.application.configure do
   config.active_storage.variant_processor = :mini_magick
 
   # Mount Action Cable outside main process or domain.
-  config.action_cable.mount_path = nil
-  config.action_cable.url = 'wss://example.com/cable'
-  config.action_cable.allowed_request_origins = [ 'https://example.com', /https:\/\/example.*/ ]
+  config.action_cable.mount_path = '/cable'
+  config.action_cable.url = ENV.fetch('ACTION_CABLE_URL', '/cable')
+  config.action_cable.allowed_request_origins = [
+    'https://menu-bonnecuisine-production.up.railway.app',
+    'http://localhost:3000',
+    /https:\/\/.*\.railway\.app/
+  ]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
