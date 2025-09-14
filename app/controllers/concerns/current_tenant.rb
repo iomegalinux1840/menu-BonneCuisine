@@ -11,8 +11,12 @@ module CurrentTenant
   def set_current_restaurant
     @current_restaurant = find_restaurant_from_request
 
+    Rails.logger.debug "CurrentTenant#set_current_restaurant - Found: #{@current_restaurant&.name} (id: #{@current_restaurant&.id})"
+    Rails.logger.debug "  on_main_domain?: #{on_main_domain?}, host: #{request.host}"
+
     # If no restaurant found and we're not on the main domain, show 404
     if @current_restaurant.nil? && !on_main_domain?
+      Rails.logger.debug "  No restaurant found and not on main domain - showing 404"
       render_restaurant_not_found
     end
   end
@@ -38,9 +42,16 @@ module CurrentTenant
   end
 
   def find_by_subdomain
-    return nil if request.subdomain.blank? || reserved_subdomain?
+    # Handle .localhost domains specially
+    subdomain = if request.host.include?('.localhost')
+      request.host.split('.').first
+    else
+      request.subdomain
+    end
 
-    Restaurant.active.find_by(subdomain: request.subdomain)
+    return nil if subdomain.blank? || subdomain == 'localhost' || reserved_subdomain?(subdomain)
+
+    Restaurant.active.find_by(subdomain: subdomain)
   end
 
   def find_by_custom_domain
@@ -66,13 +77,27 @@ module CurrentTenant
   def on_main_domain?
     # Check if we're on the main platform domain without subdomain
     base_domain = ENV.fetch('BASE_DOMAIN', 'localhost')
+
+    # For .localhost domains, check manually
+    if request.host.include?('.localhost')
+      subdomain = request.host.split('.').first
+      return subdomain == 'localhost' || subdomain.blank?
+    end
+
     request.host == base_domain && request.subdomain.blank?
   end
 
-  def reserved_subdomain?
+  def reserved_subdomain?(subdomain = nil)
     # List of subdomains reserved for platform use
+    if subdomain.nil?
+      subdomain = if request.host.include?('.localhost')
+        request.host.split('.').first
+      else
+        request.subdomain
+      end
+    end
     reserved = %w[www admin api app assets help support docs]
-    reserved.include?(request.subdomain)
+    reserved.include?(subdomain)
   end
 
   def require_restaurant!

@@ -1,10 +1,18 @@
 # Define constraints inline to avoid autoloading issues
 class SubdomainConstraint
   def self.matches?(request)
-    Rails.logger.debug "SubdomainConstraint checking: subdomain='#{request.subdomain}', host='#{request.host}'"
-    return false if request.subdomain.blank?
+    # For localhost, we need to manually extract the subdomain
+    subdomain = if request.host.include?('.localhost')
+      request.host.split('.').first
+    else
+      request.subdomain
+    end
+
+    Rails.logger.debug "SubdomainConstraint checking: subdomain='#{subdomain}', host='#{request.host}'"
+    return false if subdomain.blank? || subdomain == 'localhost'
+
     reserved = %w[www admin api app assets help support docs]
-    result = !reserved.include?(request.subdomain)
+    result = !reserved.include?(subdomain)
     Rails.logger.debug "SubdomainConstraint result: #{result}"
     result
   end

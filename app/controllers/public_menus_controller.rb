@@ -10,10 +10,14 @@ class PublicMenusController < ApplicationController
   layout 'public_menu'
 
   def index
+    Rails.logger.debug "PublicMenusController#index - current_restaurant: #{current_restaurant&.name} (id: #{current_restaurant&.id})"
+
     @menu_items = current_restaurant.menu_items
                                     .available
                                     .ordered
                                     .limit(12)
+
+    Rails.logger.debug "Found #{@menu_items.count} menu items for restaurant"
 
     # Support for embeddable widget
     if params[:embed] == 'true'
