@@ -3,3 +3,4 @@
 //= link application.js
 //= link menu_updates.js
 //= link controllers/application.js
+//= link controllers/index.js
