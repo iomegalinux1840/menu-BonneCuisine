@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_14_204201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,7 +19,12 @@ ActiveRecord::Schema[7.1].define(version: 2) do
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "restaurant_id", null: false
+    t.string "role", default: "manager"
+    t.datetime "last_login_at"
     t.index ["email"], name: "index_admins_on_email", unique: true
+    t.index ["restaurant_id", "email"], name: "index_admins_on_restaurant_id_and_email", unique: true
+    t.index ["restaurant_id"], name: "index_admins_on_restaurant_id"
   end
 
   create_table "menu_items", force: :cascade do |t|
@@ -31,8 +36,32 @@ ActiveRecord::Schema[7.1].define(version: 2) do
     t.integer "position", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "restaurant_id", null: false
     t.index ["available"], name: "index_menu_items_on_available"
     t.index ["position"], name: "index_menu_items_on_position"
+    t.index ["restaurant_id", "available"], name: "index_menu_items_on_restaurant_id_and_available"
+    t.index ["restaurant_id", "position"], name: "index_menu_items_on_restaurant_id_and_position"
+    t.index ["restaurant_id"], name: "index_menu_items_on_restaurant_id"
   end
 
+  create_table "restaurants", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.string "subdomain"
+    t.string "custom_domain"
+    t.string "logo_url"
+    t.string "primary_color"
+    t.string "secondary_color"
+    t.string "font_family"
+    t.string "timezone"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["custom_domain"], name: "index_restaurants_on_custom_domain", unique: true
+    t.index ["slug"], name: "index_restaurants_on_slug", unique: true
+    t.index ["subdomain"], name: "index_restaurants_on_subdomain", unique: true
+  end
+
+  add_foreign_key "admins", "restaurants"
+  add_foreign_key "menu_items", "restaurants"
 end

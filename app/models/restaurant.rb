@@ -1,0 +1,108 @@
+class Restaurant < ApplicationRecord
+  # Associations
+  has_many :menu_items, dependent: :destroy
+  has_many :admins, dependent: :destroy
+
+  # Validations
+  validates :name, presence: true, length: { maximum: 100 }
+  validates :slug, presence: true, uniqueness: true,
+            format: { with: /\A[a-z0-9-]+\z/, message: "only lowercase letters, numbers and hyphens" },
+            length: { minimum: 3, maximum: 50 }
+  validates :subdomain, uniqueness: { allow_blank: true },
+            format: { with: /\A[a-z0-9-]+\z/, message: "only lowercase letters, numbers and hyphens" },
+            length: { minimum: 3, maximum: 50 },
+            allow_blank: true
+  validates :custom_domain, uniqueness: { allow_blank: true },
+            format: { with: /\A[a-z0-9.-]+\z/, message: "invalid domain format" },
+            allow_blank: true
+
+  # Reserved subdomains that cannot be used
+  RESERVED_SUBDOMAINS = %w[
+    www admin api app assets help support docs
+    blog mail email ftp ssh test dev staging
+    production demo portal dashboard login signup
+    register account billing payment
+  ].freeze
+
+  validate :subdomain_not_reserved
+
+  # Callbacks
+  before_validation :generate_slug, on: :create
+  before_validation :normalize_fields
+
+  # Scopes
+  scope :active, -> { where(deleted_at: nil) }
+  scope :deleted, -> { where.not(deleted_at: nil) }
+
+  # Default values
+  after_initialize :set_defaults, if: :new_record?
+
+  # Soft delete
+  def soft_delete!
+    update!(deleted_at: Time.current)
+  end
+
+  def deleted?
+    deleted_at.present?
+  end
+
+  def restore!
+    update!(deleted_at: nil)
+  end
+
+  # URL helpers
+  def display_domain
+    custom_domain || subdomain_with_base || slug_with_base
+  end
+
+  def subdomain_with_base
+    return nil unless subdomain.present?
+    "#{subdomain}.#{base_domain}"
+  end
+
+  def slug_with_base
+    "#{base_domain}/#{slug}"
+  end
+
+  private
+
+  def base_domain
+    ENV.fetch('BASE_DOMAIN', 'menuplatform.app')
+  end
+
+  def generate_slug
+    return if slug.present?
+
+    base = name.downcase.gsub(/[^a-z0-9]+/, '-').gsub(/^-|-$/, '')
+    candidate = base
+    counter = 2
+
+    while Restaurant.exists?(slug: candidate)
+      candidate = "#{base}-#{counter}"
+      counter += 1
+    end
+
+    self.slug = candidate
+  end
+
+  def normalize_fields
+    self.slug = slug&.downcase&.strip
+    self.subdomain = subdomain&.downcase&.strip
+    self.custom_domain = custom_domain&.downcase&.strip
+  end
+
+  def subdomain_not_reserved
+    return unless subdomain.present?
+
+    if RESERVED_SUBDOMAINS.include?(subdomain.downcase)
+      errors.add(:subdomain, "is reserved and cannot be used")
+    end
+  end
+
+  def set_defaults
+    self.primary_color ||= '#8B4513'
+    self.secondary_color ||= '#F5DEB3'
+    self.font_family ||= 'Playfair Display'
+    self.timezone ||= 'America/Toronto'
+  end
+end
