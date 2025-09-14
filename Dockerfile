@@ -14,5 +14,5 @@ COPY . .
 # Precompile assets
 RUN bundle exec rails assets:precompile
 
-# Run server
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+# Run server on Railway's PORT
+CMD bundle exec rails server -b 0.0.0.0 -p ${PORT:-3000}
