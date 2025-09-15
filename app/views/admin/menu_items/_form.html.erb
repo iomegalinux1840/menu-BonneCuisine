@@ -38,7 +38,7 @@
     <% if @menu_item.image.attached? %>
       <div class="current-image">
         <p><strong>Image actuelle:</strong></p>
-        <%= image_tag @menu_item.image.variant(:thumb), class: "menu-item-thumb" %>
+        <%= image_tag @menu_item.image, class: "menu-item-thumb" %>
       </div>
     <% end %>
     <small class="form-help">Formats acceptés: JPG, PNG, GIF, WebP (max 5MB)</small>

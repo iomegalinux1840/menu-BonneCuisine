@@ -25,6 +25,9 @@ module MenuBonneCuisine
     # Configure subdomain handling for development
     config.action_dispatch.tld_length = 0 # For localhost
 
+    # Active Storage configuration
+    config.active_storage.variant_processor = :mini_magick
+
     # ActionCable configuration
     config.action_cable.mount_path = '/cable'
     config.action_cable.url = 'ws://localhost:3000/cable'

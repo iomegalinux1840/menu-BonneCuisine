@@ -3,11 +3,7 @@ class MenuItem < ApplicationRecord
   belongs_to :restaurant
 
   # Active Storage for image uploads
-  has_one_attached :image do |attachable|
-    attachable.variant :thumb, resize_to_limit: [200, 200]
-    attachable.variant :medium, resize_to_limit: [400, 400]
-    attachable.variant :large, resize_to_limit: [800, 600]
-  end
+  has_one_attached :image
 
   # Validations
   validates :name, presence: true, length: { maximum: 255 }
@@ -38,21 +34,13 @@ class MenuItem < ApplicationRecord
   end
 
   def broadcast_menu_update
-    # Get all available menu items for this restaurant
-    menu_items = restaurant.menu_items.available.ordered.limit(12)
-
-    # Render the HTML for the menu items
-    renderer = ApplicationController.renderer.new
-    html = menu_items.map do |item|
-      renderer.render(partial: 'menu_items/menu_item', locals: { menu_item: item })
-    end.join
-
-    # Broadcast the update with restaurant-specific channel
+    # Broadcast simple update notification instead of rendering HTML
+    # This avoids potential rendering issues in production
     ActionCable.server.broadcast(
       "menu_channel_#{restaurant.id}",
       {
         action: "update",
-        html: html
+        menu_item_id: self.id
       }
     )
   rescue => e
