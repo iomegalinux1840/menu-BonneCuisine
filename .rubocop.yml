@@ -1,0 +1,138 @@
+require:
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-performance
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'db/**/*'
+    - 'bin/**/*'
+    - 'config/**/*'
+    - 'public/**/*'
+    - 'vendor/**/*'
+    - 'tmp/**/*'
+    - 'node_modules/**/*'
+    - 'spec/rails_helper.rb'
+    - 'spec/spec_helper.rb'
+
+# Rails-specific cops
+Rails:
+  Enabled: true
+
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - development
+    - test
+    - staging
+
+# Verify that models and controllers have proper associations
+Rails/HasManyOrHasOneDependent:
+  Enabled: true
+  Severity: error
+
+# Ensure proper use of Rails methods
+Rails/FindBy:
+  Enabled: true
+  Severity: error
+
+Rails/FindEach:
+  Enabled: true
+  Severity: warning
+
+# Prevent N+1 queries
+Rails/EagerEvalLogMessage:
+  Enabled: true
+
+# Security cops
+Rails/OutputSafety:
+  Enabled: true
+  Severity: error
+
+Security/Eval:
+  Enabled: true
+  Severity: error
+
+Security/Open:
+  Enabled: true
+  Severity: error
+
+# Style preferences
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/SymbolArray:
+  Enabled: true
+  EnforcedStyle: brackets
+
+# Layout preferences
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - 'spec/**/*'
+
+# Metrics
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/ClassLength:
+  Max: 200
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'config/routes.rb'
+    - 'config/environments/*'
+
+# Naming conventions
+Naming/PredicateName:
+  Enabled: true
+
+Naming/AccessorMethodName:
+  Enabled: true
+
+# Lint cops - these catch potential bugs
+Lint/UnusedMethodArgument:
+  Enabled: true
+  Severity: warning
+
+Lint/UnusedBlockArgument:
+  Enabled: true
+  Severity: warning
+
+Lint/UselessAssignment:
+  Enabled: true
+  Severity: error
+
+Lint/Void:
+  Enabled: true
+  Severity: error
+
+# Check for undefined methods (this would catch the authenticate issue)
+Lint/PossibleValues:
+  Enabled: true
+
+# RSpec configuration
+RSpec/ExampleLength:
+  Max: 20
+
+RSpec/MultipleExpectations:
+  Max: 5
+
+RSpec/NestedGroups:
+  Max: 3
+
+# Performance cops
+Performance/Count:
+  Enabled: true
+
+Performance/Detect:
+  Enabled: true

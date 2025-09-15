@@ -1,0 +1,127 @@
+# Overcommit configuration for pre-commit hooks
+# This prevents broken code from being committed
+
+PreCommit:
+  # Ruby/Rails linting
+  RuboCop:
+    enabled: true
+    description: 'Checking Ruby code style'
+    required_executable: 'bundle'
+    command: ['bundle', 'exec', 'rubocop']
+    include:
+      - '**/*.rb'
+      - '**/*.rake'
+      - '**/Gemfile'
+      - '**/Rakefile'
+    problem_on_unmodified_line: warn
+    on_warn: fail # Treat warnings as failures
+
+  # Rails security analysis
+  Brakeman:
+    enabled: true
+    description: 'Checking for security vulnerabilities'
+    required_executable: 'bundle'
+    command: ['bundle', 'exec', 'brakeman', '--no-pager', '--quiet']
+    on_warn: fail
+
+  # Rails best practices
+  RailsBestPractices:
+    enabled: true
+    description: 'Checking Rails best practices'
+    required_executable: 'bundle'
+    command: ['bundle', 'exec', 'rails_best_practices', '.', '--silent']
+    on_warn: warn
+
+  # Code smell detection
+  Reek:
+    enabled: true
+    description: 'Checking for code smells'
+    required_executable: 'bundle'
+    command: ['bundle', 'exec', 'reek']
+    on_warn: warn
+
+  # Check for debugging statements
+  LocalPathsInGemfile:
+    enabled: true
+
+  RailsSchemaUpToDate:
+    enabled: true
+    description: 'Check if schema.rb is up to date'
+
+  # YAML syntax check
+  YamlSyntax:
+    enabled: true
+    include:
+      - '**/*.yml'
+      - '**/*.yaml'
+
+  # JSON syntax check
+  JsonSyntax:
+    enabled: true
+    include:
+      - '**/*.json'
+
+  # Check for merge conflicts
+  MergeConflicts:
+    enabled: true
+    description: 'Check for unresolved merge conflicts'
+    on_warn: fail
+
+  # Check for debugger statements
+  Pry:
+    enabled: true
+    description: 'Check for binding.pry statements'
+    include:
+      - '**/*.rb'
+    on_warn: fail
+
+  # Bundle audit for vulnerable gems
+  BundleAudit:
+    enabled: false # Disable for now as it needs separate installation
+    description: 'Check for vulnerable gem dependencies'
+    required_executable: 'bundle'
+    install_command: 'gem install bundler-audit'
+    on_warn: warn
+
+  # Check for trailing whitespace
+  TrailingWhitespace:
+    enabled: true
+    exclude:
+      - '**/db/structure.sql'
+      - '**/db/schema.rb'
+
+# Pre-push hooks (run before pushing to remote)
+PrePush:
+  # Run tests before push
+  RSpec:
+    enabled: false # Enable when tests are added
+    description: 'Running full test suite'
+    required_executable: 'bundle'
+    command: ['bundle', 'exec', 'rspec']
+
+  # Check for protected branches
+  ProtectedBranches:
+    enabled: true
+    description: 'Check for pushes to protected branches'
+    branches: ['main', 'master', 'production']
+
+# Commit message format
+CommitMsg:
+  # Check commit message format
+  TextWidth:
+    enabled: true
+    description: 'Check text width'
+    max_subject_width: 72
+    max_body_width: 80
+
+  TrailingPeriod:
+    enabled: true
+    description: 'Check for trailing periods in subject'
+
+  SingleLineSubject:
+    enabled: true
+    description: 'Check that subject is a single line'
+
+  CapitalizedSubject:
+    enabled: true
+    description: 'Check that subject starts with capital letter'

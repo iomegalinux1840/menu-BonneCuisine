@@ -53,6 +53,17 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem "rspec-rails"
   gem "factory_bot_rails"
+
+  # Code quality and linting
+  gem "rubocop", require: false
+  gem "rubocop-rails", require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-performance", require: false
+
+  # Static analysis
+  gem "brakeman", require: false
+  gem "rails_best_practices", require: false
+  gem "reek", require: false
 end
 
 group :test do
@@ -69,4 +80,7 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+  # Pre-commit hooks
+  gem "overcommit", require: false
 end
