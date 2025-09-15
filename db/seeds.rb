@@ -132,7 +132,80 @@ menu_items.each do |item|
   puts "Plat créé: #{menu_item.name} - #{menu_item.price}$"
 end
 
-puts "\n✨ Base de données initialisée avec succès!"
+puts "\n✨ Restaurant 1 créé avec succès!"
 puts "📧 Admin: #{admin.email}"
 puts "🔑 Mot de passe: password123"
-puts "🍟 #{MenuItem.count} plats créés"
+puts "🍟 #{restaurant.menu_items.count} plats créés"
+
+# Create a second restaurant for demonstration
+pizza_restaurant = Restaurant.create!(
+  name: "Tony's Pizza Palace",
+  slug: 'tonys-pizza',
+  subdomain: 'tonys',
+  primary_color: '#D32F2F',
+  secondary_color: '#FFF3E0',
+  font_family: 'Roboto Slab',
+  timezone: 'America/Toronto'
+)
+
+pizza_admin = Admin.create!(
+  email: 'admin@tonyspizza.com',
+  password: 'pizza123',
+  password_confirmation: 'pizza123',
+  restaurant: pizza_restaurant,
+  role: 'owner'
+)
+
+pizza_items = [
+  {
+    name: 'Margherita Classic',
+    description: 'Fresh mozzarella, tomato sauce, basil leaves, extra virgin olive oil',
+    price: 14.99,
+    comment: 'Vegetarian • Our signature pizza',
+    available: true,
+    position: 1
+  },
+  {
+    name: 'Pepperoni Feast',
+    description: 'Double pepperoni, mozzarella, oregano, tomato sauce',
+    price: 16.99,
+    comment: 'Most popular • Contains: pork',
+    available: true,
+    position: 2
+  },
+  {
+    name: 'BBQ Chicken',
+    description: 'Grilled chicken, BBQ sauce, red onions, cilantro, mozzarella',
+    price: 17.99,
+    comment: 'Sweet & savory • Contains: gluten',
+    available: true,
+    position: 3
+  },
+  {
+    name: 'Vegetarian Supreme',
+    description: 'Bell peppers, mushrooms, onions, olives, tomatoes, mozzarella',
+    price: 15.99,
+    comment: 'Vegetarian • Loaded with fresh veggies',
+    available: true,
+    position: 4
+  },
+  {
+    name: 'Hawaiian',
+    description: 'Ham, pineapple, mozzarella, tomato sauce',
+    price: 15.99,
+    comment: 'Sweet & salty combo',
+    available: true,
+    position: 5
+  }
+]
+
+pizza_items.each do |item|
+  pizza_restaurant.menu_items.create!(item)
+end
+
+puts "\n🍕 Restaurant 2 créé avec succès!"
+puts "📧 Admin: #{pizza_admin.email}"
+puts "🔑 Mot de passe: pizza123"
+puts "🍕 #{pizza_restaurant.menu_items.count} pizzas créées"
+
+puts "\n✅ Total: #{Restaurant.count} restaurants, #{MenuItem.count} items au menu"

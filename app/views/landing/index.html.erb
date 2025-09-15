@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Restaurant Directory</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      font-size: 3rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .subtitle {
+      text-align: center;
+      color: rgba(255,255,255,0.9);
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+    }
+
+    .restaurants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .restaurant-card {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .restaurant-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+
+    .restaurant-name {
+      font-size: 1.8rem;
+      color: #333;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .restaurant-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px 20px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-menu {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-menu:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-admin {
+      background: #f3f4f6;
+      color: #4b5563;
+      border: 2px solid #e5e7eb;
+    }
+
+    .btn-admin:hover {
+      background: #e5e7eb;
+      border-color: #d1d5db;
+    }
+
+    .no-restaurants {
+      background: white;
+      border-radius: 15px;
+      padding: 60px 30px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .no-restaurants h2 {
+      color: #4b5563;
+      margin-bottom: 15px;
+    }
+
+    .no-restaurants p {
+      color: #6b7280;
+      font-size: 1.1rem;
+    }
+
+    .restaurant-info {
+      color: #6b7280;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .restaurants-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🍽️ Restaurant Directory</h1>
+    <p class="subtitle">Choose a restaurant to view their menu</p>
+
+    <% if @restaurants.any? %>
+      <div class="restaurants-grid">
+        <% @restaurants.each do |restaurant| %>
+          <div class="restaurant-card">
+            <h2 class="restaurant-name"><%= restaurant.name %></h2>
+
+            <% if restaurant.menu_items.any? %>
+              <p class="restaurant-info">
+                <%= restaurant.menu_items.count %> items on menu
+              </p>
+            <% end %>
+
+            <div class="restaurant-links">
+              <%= link_to "View Menu", restaurant_menu_path(restaurant_slug: restaurant.slug), class: "btn btn-menu" %>
+              <%= link_to "Admin", restaurant_admin_login_path(restaurant_slug: restaurant.slug), class: "btn btn-admin" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="no-restaurants">
+        <h2>No Restaurants Available</h2>
+        <p>There are currently no restaurants registered in the system.</p>
+      </div>
+    <% end %>
+  </div>
+</body>
+</html>

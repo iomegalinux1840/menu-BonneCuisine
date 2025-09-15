@@ -34,35 +34,45 @@ Rails.application.routes.draw do
   # Mount ActionCable for all domains
   mount ActionCable.server => '/cable'
 
-  # Check for Railway environment (simplified routing)
+  # Check for Railway environment (multi-tenant routing)
   if ENV['RAILWAY_ENVIRONMENT'].present? || ENV['RAILS_ENV'] == 'production'
-    # Simplified routing for Railway deployment
-    root 'public_menus#index'
+    # Root shows list of restaurants
+    root 'landing#index'
 
     # Debug route to check restaurants
     get 'debug/restaurants', to: 'debug#restaurants'
 
-    # Path-based restaurant access
-    get 'r/:restaurant_slug', to: 'public_menus#index', as: :restaurant_path
+    # Restaurant-specific public menu routes
+    get 'r/:restaurant_slug', to: 'public_menus#index', as: :restaurant_menu
+    get 'r/:restaurant_slug/menu', to: 'public_menus#index'
 
-    # Admin routes
-    get 'admin', to: redirect('/admin/login')
-    get 'admin/login', to: 'admin/sessions#new', as: :admin_login
-    post 'admin/login', to: 'admin/sessions#create'
-    delete 'admin/logout', to: 'admin/sessions#destroy', as: :admin_logout
+    # Restaurant-specific admin routes
+    get 'r/:restaurant_slug/admin', to: redirect('/r/%{restaurant_slug}/admin/login')
+    get 'r/:restaurant_slug/admin/login', to: 'admin/sessions#new', as: :restaurant_admin_login
+    post 'r/:restaurant_slug/admin/login', to: 'admin/sessions#create'
+    delete 'r/:restaurant_slug/admin/logout', to: 'admin/sessions#destroy', as: :restaurant_admin_logout
 
-    namespace :admin do
-      resources :menu_items do
+    scope 'r/:restaurant_slug/admin', as: :restaurant_admin do
+      resources :menu_items, controller: 'admin/menu_items' do
         member do
           patch :toggle_availability
         end
       end
-      resources :settings, only: [:index, :update]
-      resources :admins
+      resources :settings, controller: 'admin/settings', only: [:index, :update]
+      resources :admins, controller: 'admin/admins'
     end
 
-    # Legacy route
-    get 'menu', to: 'public_menus#index'
+    # Legacy admin route redirects to restaurant list
+    get 'admin', to: redirect('/')
+    get 'admin/login', to: redirect('/')
+
+    # Create new restaurant
+    resources :restaurants, only: [:new, :create] do
+      member do
+        get :setup
+        patch :complete_setup
+      end
+    end
   else
     # Original complex routing for local development
     # Restaurant subdomain routes (e.g., restaurant-a.menuplatform.app)
