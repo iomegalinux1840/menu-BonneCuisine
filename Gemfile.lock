@@ -404,6 +404,7 @@ DEPENDENCIES
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
+  mini_magick
   overcommit
   pg (~> 1.1)
   puma (~> 6.0)

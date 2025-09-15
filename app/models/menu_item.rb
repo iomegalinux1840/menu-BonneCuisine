@@ -9,9 +9,9 @@ class MenuItem < ApplicationRecord
   validates :name, presence: true, length: { maximum: 255 }
   validates :price, presence: true, numericality: { greater_than: 0 }
   validates :position, presence: true, uniqueness: { scope: :restaurant_id }
-  validates :image, content_type: { in: %w[image/jpeg image/gif image/png image/webp],
-                                    message: "doit être un format d'image valide" },
-                    size: { less_than: 5.megabytes, message: "ne doit pas dépasser 5MB" }
+
+  # Custom image validation (Active Storage validators not loaded in all environments)
+  validate :image_format_and_size
 
   # Scopes
   scope :available, -> { where(available: true) }
@@ -58,5 +58,19 @@ class MenuItem < ApplicationRecord
     )
   rescue => e
     Rails.logger.warn "Broadcasting error: #{e.message}"
+  end
+
+  def image_format_and_size
+    return unless image.attached?
+
+    # Check file size
+    if image.byte_size > 5.megabytes
+      errors.add(:image, "ne doit pas dépasser 5MB")
+    end
+
+    # Check file type
+    unless image.content_type.in?(%w[image/jpeg image/png image/gif image/webp])
+      errors.add(:image, "doit être un format d'image valide (JPG, PNG, GIF, WebP)")
+    end
   end
 end
