@@ -1,5 +1,4 @@
 class Admin::MenuItemsController < ApplicationController
-  include CurrentTenant
   layout 'admin'
   before_action :authenticate_admin!
   before_action :load_restaurant_from_slug
@@ -54,13 +53,17 @@ class Admin::MenuItemsController < ApplicationController
   private
 
   def load_restaurant_from_slug
-    @restaurant = Restaurant.find_by!(slug: params[:restaurant_slug])
+    @restaurant = Restaurant.active.find_by(slug: params[:restaurant_slug])
+    unless @restaurant
+      Rails.logger.error "Restaurant not found for menu items: #{params[:restaurant_slug]}"
+      render file: Rails.public_path.join('404.html'), status: :not_found, layout: false
+      return
+    end
+
     # Ensure admin belongs to this restaurant
-    if current_admin && current_admin.restaurant != @restaurant
+    if current_admin && current_admin.restaurant_id != @restaurant.id
       redirect_to root_path, alert: 'Access denied'
     end
-  rescue ActiveRecord::RecordNotFound
-    redirect_to root_path, alert: 'Restaurant not found'
   end
 
   def set_menu_item

@@ -1,6 +1,6 @@
 class Admin::SessionsController < ApplicationController
-  include CurrentTenant
   layout 'admin'
+  skip_before_action :verify_authenticity_token, only: [:create]
   before_action :load_restaurant_from_slug
   before_action :redirect_if_logged_in, only: [:new, :create]
 
@@ -29,9 +29,11 @@ class Admin::SessionsController < ApplicationController
   private
 
   def load_restaurant_from_slug
-    @restaurant = Restaurant.find_by!(slug: params[:restaurant_slug])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to root_path, alert: 'Restaurant not found'
+    @restaurant = Restaurant.active.find_by(slug: params[:restaurant_slug])
+    unless @restaurant
+      Rails.logger.error "Restaurant not found: #{params[:restaurant_slug]}"
+      render file: Rails.public_path.join('404.html'), status: :not_found, layout: false
+    end
   end
 
   def redirect_if_logged_in
