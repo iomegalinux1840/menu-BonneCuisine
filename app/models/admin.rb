@@ -22,11 +22,19 @@ class Admin < ApplicationRecord
   after_create :ensure_restaurant_has_owner
 
   # Class methods
+  def self.authenticate(email, password)
+    admin = find_by(email: email)
+    return nil unless admin&.authenticate(password)
+
+    admin.update_column(:last_login_at, Time.current) if admin.respond_to?(:last_login_at)
+    admin
+  end
+
   def self.authenticate_for_restaurant(restaurant, email, password)
     admin = restaurant.admins.find_by(email: email)
     return nil unless admin&.authenticate(password)
 
-    admin.update_column(:last_login_at, Time.current)
+    admin.update_column(:last_login_at, Time.current) if admin.respond_to?(:last_login_at)
     admin
   end
 
