@@ -1,7 +1,7 @@
 <div class="admin-content">
   <div class="admin-header">
     <h2>Gestion du Menu</h2>
-    <%= link_to "Ajouter un plat", new_admin_menu_item_path, class: "btn btn-primary" %>
+    <%= link_to "Ajouter un plat", new_restaurant_admin_menu_item_path(restaurant_slug: params[:restaurant_slug]), class: "btn btn-primary" %>
   </div>
 
   <div class="table-container">
@@ -27,7 +27,7 @@
             </td>
             <td><%= number_to_currency(menu_item.price, unit: "$", precision: 2, locale: :en) %></td>
             <td>
-              <%= button_to toggle_availability_admin_menu_item_path(menu_item),
+              <%= button_to toggle_availability_restaurant_admin_menu_item_path(restaurant_slug: params[:restaurant_slug], id: menu_item),
                     method: :patch,
                     remote: true,
                     class: "btn btn-sm #{menu_item.available? ? 'btn-success' : 'btn-warning'}",
@@ -36,8 +36,8 @@
               <% end %>
             </td>
             <td class="actions-cell">
-              <%= link_to "Modifier", edit_admin_menu_item_path(menu_item), class: "btn btn-sm btn-outline" %>
-              <%= link_to "Supprimer", admin_menu_item_path(menu_item),
+              <%= link_to "Modifier", edit_restaurant_admin_menu_item_path(restaurant_slug: params[:restaurant_slug], id: menu_item), class: "btn btn-sm btn-outline" %>
+              <%= link_to "Supprimer", restaurant_admin_menu_item_path(restaurant_slug: params[:restaurant_slug], id: menu_item),
                     method: :delete,
                     class: "btn btn-sm btn-danger",
                     confirm: "Êtes-vous sûr de vouloir supprimer ce plat ?" %>
@@ -50,7 +50,7 @@
     <% if @menu_items.empty? %>
       <div class="empty-state">
         <p>Aucun plat dans le menu.</p>
-        <%= link_to "Ajouter le premier plat", new_admin_menu_item_path, class: "btn btn-primary" %>
+        <%= link_to "Ajouter le premier plat", new_restaurant_admin_menu_item_path(restaurant_slug: params[:restaurant_slug]), class: "btn btn-primary" %>
       </div>
     <% end %>
   </div>

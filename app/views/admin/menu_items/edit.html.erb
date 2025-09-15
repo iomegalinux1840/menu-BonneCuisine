@@ -1,11 +1,11 @@
 <div class="admin-content">
   <div class="admin-header">
     <h2>Modifier le plat</h2>
-    <%= link_to "← Retour au menu", admin_menu_items_path, class: "btn btn-outline" %>
+    <%= link_to "← Retour au menu", restaurant_admin_menu_items_path(restaurant_slug: params[:restaurant_slug]), class: "btn btn-outline" %>
   </div>
 
   <div class="form-container">
-    <%= form_with model: [:admin, @menu_item], local: true, class: "admin-form" do |form| %>
+    <%= form_with model: @menu_item, local: true, class: "admin-form" do |form| %>
       <%= render 'form', form: form %>
     <% end %>
   </div>

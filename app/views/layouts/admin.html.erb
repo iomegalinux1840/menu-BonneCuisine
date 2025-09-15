@@ -21,7 +21,7 @@
         <% if admin_logged_in? %>
           <div class="nav-actions">
             <%= link_to "Voir le menu public", root_path, class: "btn btn-outline", target: "_blank" %>
-            <%= button_to "Déconnexion", admin_logout_path, method: :delete, class: "btn btn-danger", form: { style: "display: inline-block;" } %>
+            <%= button_to "Déconnexion", restaurant_admin_logout_path(restaurant_slug: params[:restaurant_slug]), method: :delete, class: "btn btn-danger", form: { style: "display: inline-block;" } %>
           </div>
         <% end %>
       </div>
