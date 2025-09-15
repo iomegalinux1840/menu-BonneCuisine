@@ -24,7 +24,19 @@ class ApplicationController < ActionController::Base
   private
 
   def authenticate_admin!
-    redirect_to admin_login_path unless admin_logged_in?
+    unless admin_logged_in?
+      if ENV['RAILWAY_ENVIRONMENT'].present? || ENV['RAILS_ENV'] == 'production'
+        # In production, redirect to restaurant-specific login
+        if params[:restaurant_slug].present?
+          redirect_to restaurant_admin_login_path(restaurant_slug: params[:restaurant_slug])
+        else
+          # If no restaurant slug, redirect to root
+          redirect_to root_path
+        end
+      else
+        redirect_to admin_login_path
+      end
+    end
   end
 
   def admin_logged_in?
