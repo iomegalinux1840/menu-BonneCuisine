@@ -32,7 +32,10 @@ class Admin::SessionsController < ApplicationController
     @restaurant = Restaurant.active.find_by(slug: params[:restaurant_slug])
     unless @restaurant
       Rails.logger.error "Restaurant not found: #{params[:restaurant_slug]}"
-      render file: Rails.public_path.join('404.html').to_s, status: :not_found, layout: false
+      respond_to do |format|
+        format.html { render plain: "404 Restaurant Not Found", status: :not_found }
+        format.json { render json: { error: "Restaurant not found" }, status: :not_found }
+      end
       return
     end
   end
