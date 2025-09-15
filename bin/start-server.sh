@@ -10,11 +10,15 @@ if [ -z "$PORT" ]; then
   PORT=3000
 fi
 
-# Run migrations if in production
+# Run migrations and seed if in production
 if [ "$RAILS_ENV" = "production" ]; then
   echo "Running database migrations..."
   bundle exec rails db:migrate
   echo "Migrations complete"
+
+  echo "Seeding database..."
+  bundle exec rails db:seed
+  echo "Database seeding complete"
 fi
 
 echo "Starting server on port $PORT"

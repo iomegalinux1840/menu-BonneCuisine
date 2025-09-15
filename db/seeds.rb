@@ -1,12 +1,28 @@
 # Clear existing data
-Admin.destroy_all
 MenuItem.destroy_all
+Admin.destroy_all
+Restaurant.destroy_all
+
+# Create the restaurant first
+restaurant = Restaurant.create!(
+  name: 'La Bonne Cuisine',
+  slug: 'la-bonne-cuisine',
+  subdomain: 'labonnecuisine',
+  primary_color: '#8B4513',
+  secondary_color: '#F5DEB3',
+  font_family: 'Playfair Display',
+  timezone: 'America/Toronto'
+)
+
+puts "Restaurant créé: #{restaurant.name} (slug: #{restaurant.slug})"
 
 # Create admin user
 admin = Admin.create!(
   email: 'admin@labonnecuisine.ca',
   password: 'password123',
-  password_confirmation: 'password123'
+  password_confirmation: 'password123',
+  restaurant: restaurant,
+  role: 'owner'
 )
 
 puts "Admin créé: #{admin.email}"
@@ -112,7 +128,7 @@ menu_items = [
 ]
 
 menu_items.each do |item|
-  menu_item = MenuItem.create!(item)
+  menu_item = restaurant.menu_items.create!(item)
   puts "Plat créé: #{menu_item.name} - #{menu_item.price}$"
 end
 

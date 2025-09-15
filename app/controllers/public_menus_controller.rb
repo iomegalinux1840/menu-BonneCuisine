@@ -4,6 +4,7 @@ class PublicMenusController < ApplicationController
   include CurrentTenant
 
   skip_before_action :verify_authenticity_token, only: [:index]
+  before_action :set_default_restaurant_for_production
   before_action :require_restaurant!
   before_action :apply_restaurant_branding
 
@@ -26,6 +27,13 @@ class PublicMenusController < ApplicationController
   end
 
   private
+
+  def set_default_restaurant_for_production
+    # For Railway/production, use default restaurant if none found
+    if Rails.env.production? && @current_restaurant.nil?
+      @current_restaurant = Restaurant.find_by(slug: 'la-bonne-cuisine') || Restaurant.first
+    end
+  end
 
   def apply_restaurant_branding
     @restaurant_branding = {
