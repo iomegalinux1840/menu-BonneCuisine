@@ -32,6 +32,18 @@
           placeholder: "Informations supplémentaires pour les clients..." %>
   </div>
 
+  <div class="form-group full-width">
+    <%= form.label :image, "Photo du plat", class: "form-label" %>
+    <%= form.file_field :image, accept: "image/*", class: "form-input", capture: "environment" %>
+    <% if @menu_item.image.attached? %>
+      <div class="current-image">
+        <p><strong>Image actuelle:</strong></p>
+        <%= image_tag @menu_item.image.variant(:thumb), class: "menu-item-thumb" %>
+      </div>
+    <% end %>
+    <small class="form-help">Formats acceptés: JPG, PNG, GIF, WebP (max 5MB)</small>
+  </div>
+
   <div class="form-group">
     <%= form.label :position, "Position dans le menu", class: "form-label" %>
     <%= form.number_field :position, min: 1, class: "form-input" %>
@@ -49,5 +61,5 @@
 <div class="form-actions">
   <%= form.submit (@menu_item.new_record? ? "Créer le plat" : "Mettre à jour le plat"),
         class: "btn btn-primary" %>
-  <%= link_to "Annuler", admin_menu_items_path, class: "btn btn-outline" %>
+  <%= link_to "Annuler", restaurant_admin_menu_items_path(restaurant_slug: params[:restaurant_slug]), class: "btn btn-outline" %>
 </div>

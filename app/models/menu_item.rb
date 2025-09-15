@@ -2,10 +2,20 @@ class MenuItem < ApplicationRecord
   # Associations
   belongs_to :restaurant
 
+  # Active Storage for image uploads
+  has_one_attached :image do |attachable|
+    attachable.variant :thumb, resize_to_limit: [200, 200]
+    attachable.variant :medium, resize_to_limit: [400, 400]
+    attachable.variant :large, resize_to_limit: [800, 600]
+  end
+
   # Validations
   validates :name, presence: true, length: { maximum: 255 }
   validates :price, presence: true, numericality: { greater_than: 0 }
   validates :position, presence: true, uniqueness: { scope: :restaurant_id }
+  validates :image, content_type: { in: %w[image/jpeg image/gif image/png image/webp],
+                                    message: "doit être un format d'image valide" },
+                    size: { less_than: 5.megabytes, message: "ne doit pas dépasser 5MB" }
 
   # Scopes
   scope :available, -> { where(available: true) }

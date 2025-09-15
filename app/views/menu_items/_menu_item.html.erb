@@ -1,4 +1,10 @@
 <div class="menu-item" data-menu-item-id="<%= menu_item.id %>">
+  <% if menu_item.image.attached? %>
+    <div class="menu-item-image">
+      <%= image_tag menu_item.image.variant(:medium), alt: menu_item.name, class: "menu-item-photo" %>
+    </div>
+  <% end %>
+
   <div class="menu-item-header">
     <h3 class="menu-item-name"><%= menu_item.name %></h3>
     <span class="menu-item-price"><%= number_to_currency(menu_item.price, unit: "$", precision: 2, locale: :en) %></span>
