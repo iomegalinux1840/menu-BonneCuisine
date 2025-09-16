@@ -82,30 +82,52 @@ class MenuItem < ApplicationRecord
   def image_format_and_size
     Rails.logger.info "=== IMAGE VALIDATION START ==="
     Rails.logger.info "Image attached?: #{image.attached?}"
+    Rails.logger.info "Image object: #{image.inspect}"
 
     return unless image.attached?
 
-    Rails.logger.info "Validating image: #{image.filename}, size: #{image.byte_size}, content_type: #{image.content_type}"
+    begin
+      Rails.logger.info "Validating image: #{image.filename}, size: #{image.byte_size}, content_type: #{image.content_type}"
 
-    # Check file size
-    if image.byte_size > 5.megabytes
-      Rails.logger.warn "Image too large: #{image.byte_size} bytes"
-      errors.add(:image, "ne doit pas dépasser 5MB")
+      # Check file size
+      if image.byte_size > 5.megabytes
+        Rails.logger.warn "Image too large: #{image.byte_size} bytes"
+        errors.add(:image, "ne doit pas dépasser 5MB")
+      end
+
+      # Check file type - more lenient for now
+      allowed_types = %w[image/jpeg image/png image/gif image/webp image/jpg]
+      unless image.content_type.in?(allowed_types)
+        Rails.logger.warn "Invalid image type: #{image.content_type}"
+        errors.add(:image, "doit être un format d'image valide (JPG, PNG, GIF, WebP)")
+      end
+
+      # Try to access the blob to see if Active Storage is working
+      if image.blob
+        Rails.logger.info "Image blob found: #{image.blob.inspect}"
+        Rails.logger.info "Blob key: #{image.blob.key}"
+        Rails.logger.info "Blob filename: #{image.blob.filename}"
+      else
+        Rails.logger.warn "No blob found for attached image"
+      end
+
+      Rails.logger.info "Image validation completed successfully"
+      Rails.logger.info "=== IMAGE VALIDATION END ==="
+    rescue ActiveStorage::FileNotFoundError => e
+      Rails.logger.error "ActiveStorage FileNotFoundError: #{e.message}"
+      errors.add(:image, "Le fichier image n'a pas été trouvé")
+    rescue ActiveStorage::IntegrityError => e
+      Rails.logger.error "ActiveStorage IntegrityError: #{e.message}"
+      errors.add(:image, "L'image est corrompue ou invalide")
+    rescue ActiveStorage::InvalidError => e
+      Rails.logger.error "ActiveStorage InvalidError: #{e.message}"
+      errors.add(:image, "Format d'image non supporté")
+    rescue => e
+      Rails.logger.error "Image validation error: #{e.message}"
+      Rails.logger.error "Image validation backtrace: #{e.backtrace.first(10).join("\n")}"
+      Rails.logger.error "Error class: #{e.class.name}"
+      Rails.logger.error "=== IMAGE VALIDATION EXCEPTION ==="
+      errors.add(:image, "Erreur lors du traitement de l'image: #{e.message}")
     end
-
-    # Check file type - more lenient for now
-    allowed_types = %w[image/jpeg image/png image/gif image/webp image/jpg]
-    unless image.content_type.in?(allowed_types)
-      Rails.logger.warn "Invalid image type: #{image.content_type}"
-      errors.add(:image, "doit être un format d'image valide (JPG, PNG, GIF, WebP)")
-    end
-
-    Rails.logger.info "Image validation completed successfully"
-    Rails.logger.info "=== IMAGE VALIDATION END ==="
-  rescue => e
-    Rails.logger.error "Image validation error: #{e.message}"
-    Rails.logger.error "Image validation backtrace: #{e.backtrace.first(5).join("\n")}"
-    Rails.logger.error "=== IMAGE VALIDATION EXCEPTION ==="
-    errors.add(:image, "Erreur lors du traitement de l'image")
   end
 end

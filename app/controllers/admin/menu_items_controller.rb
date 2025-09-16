@@ -41,16 +41,27 @@ class Admin::MenuItemsController < ApplicationController
     end
 
     begin
+      Rails.logger.info "About to build menu_item with params"
       @menu_item = @restaurant.menu_items.build(menu_item_params)
+      Rails.logger.info "MenuItem built: #{@menu_item.inspect}"
 
-      if @menu_item.save
+      save_result = @menu_item.save
+      Rails.logger.info "Save result: #{save_result}"
+
+      if save_result
         Rails.logger.info "MenuItem created successfully: #{@menu_item.name}"
         Rails.logger.info "MenuItem has image attached: #{@menu_item.image.attached?}"
+
+        if @menu_item.image.attached?
+          Rails.logger.info "Created image details: filename=#{@menu_item.image.filename}, size=#{@menu_item.image.byte_size}, content_type=#{@menu_item.image.content_type}"
+        end
+
         Rails.logger.info "=== MenuItem CREATE SUCCESS ==="
         redirect_to restaurant_admin_menu_items_path(restaurant_slug: @restaurant.slug), notice: 'Plat créé avec succès!'
       else
         Rails.logger.error "MenuItem creation failed: #{@menu_item.errors.full_messages.join(', ')}"
         Rails.logger.error "MenuItem validation errors: #{@menu_item.errors.inspect}"
+        Rails.logger.error "MenuItem state after failed save: attached?=#{@menu_item.image.attached?}"
         Rails.logger.error "=== MenuItem CREATE FAILED ==="
         render :new, status: :unprocessable_entity
       end
@@ -59,7 +70,7 @@ class Admin::MenuItemsController < ApplicationController
       Rails.logger.error "MenuItem create backtrace: #{e.backtrace.first(10).join("\n")}"
       Rails.logger.error "=== MenuItem CREATE EXCEPTION ==="
       @menu_item = @restaurant.menu_items.build(menu_item_params) # Rebuild for form display
-      @menu_item.errors.add(:base, "Une erreur inattendue s'est produite lors de la création")
+      @menu_item.errors.add(:base, "Une erreur inattendue s'est produite lors de la création: #{e.message}")
       render :new, status: :internal_server_error
     end
   end
@@ -88,14 +99,24 @@ class Admin::MenuItemsController < ApplicationController
     end
 
     begin
-      if @menu_item.update(menu_item_params)
+      Rails.logger.info "About to call @menu_item.update with params"
+      update_result = @menu_item.update(menu_item_params)
+      Rails.logger.info "Update result: #{update_result}"
+
+      if update_result
         Rails.logger.info "MenuItem updated successfully: #{@menu_item.name}"
         Rails.logger.info "MenuItem has image attached: #{@menu_item.image.attached?}"
+
+        if @menu_item.image.attached?
+          Rails.logger.info "Image details: filename=#{@menu_item.image.filename}, size=#{@menu_item.image.byte_size}, content_type=#{@menu_item.image.content_type}"
+        end
+
         Rails.logger.info "=== MenuItem UPDATE SUCCESS ==="
         redirect_to restaurant_admin_menu_items_path(restaurant_slug: @restaurant.slug), notice: 'Plat mis à jour avec succès!'
       else
         Rails.logger.error "MenuItem update failed: #{@menu_item.errors.full_messages.join(', ')}"
         Rails.logger.error "MenuItem validation errors: #{@menu_item.errors.inspect}"
+        Rails.logger.error "MenuItem state after failed update: attached?=#{@menu_item.image.attached?}"
         Rails.logger.error "=== MenuItem UPDATE FAILED ==="
         render :edit, status: :unprocessable_entity
       end
@@ -103,7 +124,7 @@ class Admin::MenuItemsController < ApplicationController
       Rails.logger.error "MenuItem update exception: #{e.class.name} - #{e.message}"
       Rails.logger.error "MenuItem update backtrace: #{e.backtrace.first(10).join("\n")}"
       Rails.logger.error "=== MenuItem UPDATE EXCEPTION ==="
-      @menu_item.errors.add(:base, "Une erreur inattendue s'est produite lors de la mise à jour")
+      @menu_item.errors.add(:base, "Une erreur inattendue s'est produite lors de la mise à jour: #{e.message}")
       render :edit, status: :internal_server_error
     end
   end
