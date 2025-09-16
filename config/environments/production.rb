@@ -40,6 +40,11 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.variant_processor = :mini_magick
 
+  # Use railway-specific storage if available
+  if ENV['RAILWAY_ENVIRONMENT'].present?
+    config.active_storage.service = :railway
+  end
+
   # Mount Action Cable outside main process or domain.
   config.action_cable.mount_path = '/cable'
   config.action_cable.url = ENV.fetch('ACTION_CABLE_URL', '/cable')

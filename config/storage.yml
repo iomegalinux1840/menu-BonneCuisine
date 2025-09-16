@@ -9,3 +9,8 @@ local:
 production:
   service: Disk
   root: <%= Rails.root.join("storage") %>
+
+# Alternative configuration for Railway
+railway:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>

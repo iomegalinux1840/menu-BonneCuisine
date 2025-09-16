@@ -130,4 +130,45 @@ class MenuItem < ApplicationRecord
       errors.add(:image, "Erreur lors du traitement de l'image: #{e.message}")
     end
   end
+
+  # Custom method to handle Active Storage attachment creation
+  def create_image_attachment(file)
+    return unless file.present?
+
+    Rails.logger.info "Creating image attachment for menu item #{id}"
+    Rails.logger.info "File details: #{file.inspect}"
+
+    begin
+      # Purge existing image if present
+      if image.attached?
+        Rails.logger.info "Purging existing image attachment"
+        image.purge
+      end
+
+      # Attach the new image
+      Rails.logger.info "Attaching new image..."
+      image.attach(file)
+      Rails.logger.info "Image attachment successful: #{image.attached?}"
+
+      if image.attached?
+        Rails.logger.info "Image blob details: #{image.blob.inspect}"
+        Rails.logger.info "Image blob key: #{image.blob.key}"
+      end
+
+    rescue ActiveStorage::IntegrityError => e
+      Rails.logger.error "ActiveStorage IntegrityError: #{e.message}"
+      Rails.logger.error "File size: #{file.size}, content_type: #{file.content_type}"
+      raise e
+    rescue ActiveStorage::InvalidError => e
+      Rails.logger.error "ActiveStorage InvalidError: #{e.message}"
+      raise e
+    rescue ActiveStorage::FileNotFoundError => e
+      Rails.logger.error "ActiveStorage FileNotFoundError: #{e.message}"
+      raise e
+    rescue => e
+      Rails.logger.error "Unexpected error during image attachment: #{e.class.name} - #{e.message}"
+      Rails.logger.error "Backtrace: #{e.backtrace.first(10).join("\n")}"
+      raise e
+    end
+  end
 end

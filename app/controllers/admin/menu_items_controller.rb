@@ -41,9 +41,28 @@ class Admin::MenuItemsController < ApplicationController
     end
 
     begin
+      Rails.logger.info "About to process menu item creation"
+
+      # Handle image attachment separately if present
+      image_param = menu_item_params.delete(:image)
       Rails.logger.info "About to build menu_item with params"
       @menu_item = @restaurant.menu_items.build(menu_item_params)
       Rails.logger.info "MenuItem built: #{@menu_item.inspect}"
+
+      # Handle image attachment if present
+      if image_param.present?
+        Rails.logger.info "Processing image attachment for new menu item"
+        begin
+          @menu_item.create_image_attachment(image_param)
+          Rails.logger.info "Image attachment processed successfully for new item"
+        rescue => e
+          Rails.logger.error "Image attachment failed for new item: #{e.message}"
+          Rails.logger.error "Image attachment error class: #{e.class.name}"
+          @menu_item.errors.add(:image, "Erreur lors de la sauvegarde de l'image: #{e.message}")
+          render :new, status: :unprocessable_entity
+          return
+        end
+      end
 
       save_result = @menu_item.save
       Rails.logger.info "Save result: #{save_result}"
@@ -99,6 +118,24 @@ class Admin::MenuItemsController < ApplicationController
     end
 
     begin
+      Rails.logger.info "About to process menu item update"
+
+      # Handle image attachment separately if present
+      image_param = menu_item_params.delete(:image)
+      if image_param.present?
+        Rails.logger.info "Processing image attachment separately"
+        begin
+          @menu_item.create_image_attachment(image_param)
+          Rails.logger.info "Image attachment processed successfully"
+        rescue => e
+          Rails.logger.error "Image attachment failed: #{e.message}"
+          Rails.logger.error "Image attachment error class: #{e.class.name}"
+          @menu_item.errors.add(:image, "Erreur lors de la sauvegarde de l'image: #{e.message}")
+          render :edit, status: :unprocessable_entity
+          return
+        end
+      end
+
       Rails.logger.info "About to call @menu_item.update with params"
       update_result = @menu_item.update(menu_item_params)
       Rails.logger.info "Update result: #{update_result}"
