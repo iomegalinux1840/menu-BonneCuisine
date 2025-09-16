@@ -7,6 +7,9 @@ class Admin::MenuItemsController < ApplicationController
   # Skip CSRF token verification for file uploads to prevent 422 errors
   skip_before_action :verify_authenticity_token, only: [:create, :update]
 
+  # Ensure Active Storage is available
+  before_action :check_active_storage, only: [:create, :update]
+
   def index
     @menu_items = @restaurant.menu_items.ordered
   end
@@ -19,18 +22,45 @@ class Admin::MenuItemsController < ApplicationController
   end
 
   def create
+    Rails.logger.info "=== MenuItem CREATE START ==="
     Rails.logger.info "MenuItem create - params keys: #{params.keys}"
     Rails.logger.info "MenuItem create - menu_item params: #{menu_item_params.inspect}"
+    Rails.logger.info "MenuItem create - request format: #{request.format}"
+    Rails.logger.info "MenuItem create - request method: #{request.method}"
+    Rails.logger.info "MenuItem create - content type: #{request.content_type}"
 
-    @menu_item = @restaurant.menu_items.build(menu_item_params)
-
-    if @menu_item.save
-      Rails.logger.info "MenuItem created successfully: #{@menu_item.name}"
-      redirect_to restaurant_admin_menu_items_path(restaurant_slug: @restaurant.slug), notice: 'Plat créé avec succès!'
+    # Log image information if present
+    if menu_item_params[:image].present?
+      Rails.logger.info "MenuItem create - image present in params"
+      Rails.logger.info "MenuItem create - image temp file: #{menu_item_params[:image].tempfile.path if menu_item_params[:image].respond_to?(:tempfile)}"
+      Rails.logger.info "MenuItem create - image original filename: #{menu_item_params[:image].original_filename if menu_item_params[:image].respond_to?(:original_filename)}"
+      Rails.logger.info "MenuItem create - image content type: #{menu_item_params[:image].content_type if menu_item_params[:image].respond_to?(:content_type)}"
+      Rails.logger.info "MenuItem create - image size: #{menu_item_params[:image].size if menu_item_params[:image].respond_to?(:size)}"
     else
-      Rails.logger.error "MenuItem creation failed: #{@menu_item.errors.full_messages.join(', ')}"
-      Rails.logger.error "MenuItem validation errors: #{@menu_item.errors.inspect}"
-      render :new, status: :unprocessable_entity
+      Rails.logger.info "MenuItem create - no image in params"
+    end
+
+    begin
+      @menu_item = @restaurant.menu_items.build(menu_item_params)
+
+      if @menu_item.save
+        Rails.logger.info "MenuItem created successfully: #{@menu_item.name}"
+        Rails.logger.info "MenuItem has image attached: #{@menu_item.image.attached?}"
+        Rails.logger.info "=== MenuItem CREATE SUCCESS ==="
+        redirect_to restaurant_admin_menu_items_path(restaurant_slug: @restaurant.slug), notice: 'Plat créé avec succès!'
+      else
+        Rails.logger.error "MenuItem creation failed: #{@menu_item.errors.full_messages.join(', ')}"
+        Rails.logger.error "MenuItem validation errors: #{@menu_item.errors.inspect}"
+        Rails.logger.error "=== MenuItem CREATE FAILED ==="
+        render :new, status: :unprocessable_entity
+      end
+    rescue => e
+      Rails.logger.error "MenuItem create exception: #{e.class.name} - #{e.message}"
+      Rails.logger.error "MenuItem create backtrace: #{e.backtrace.first(10).join("\n")}"
+      Rails.logger.error "=== MenuItem CREATE EXCEPTION ==="
+      @menu_item = @restaurant.menu_items.build(menu_item_params) # Rebuild for form display
+      @menu_item.errors.add(:base, "Une erreur inattendue s'est produite lors de la création")
+      render :new, status: :internal_server_error
     end
   end
 
@@ -38,17 +68,43 @@ class Admin::MenuItemsController < ApplicationController
   end
 
   def update
+    Rails.logger.info "=== MenuItem UPDATE START ==="
     Rails.logger.info "MenuItem update - params keys: #{params.keys}"
     Rails.logger.info "MenuItem update - menu_item params: #{menu_item_params.inspect}"
     Rails.logger.info "MenuItem update - authenticity_token present: #{params[:authenticity_token].present?}"
+    Rails.logger.info "MenuItem update - request format: #{request.format}"
+    Rails.logger.info "MenuItem update - request method: #{request.method}"
+    Rails.logger.info "MenuItem update - content type: #{request.content_type}"
 
-    if @menu_item.update(menu_item_params)
-      Rails.logger.info "MenuItem updated successfully: #{@menu_item.name}"
-      redirect_to restaurant_admin_menu_items_path(restaurant_slug: @restaurant.slug), notice: 'Plat mis à jour avec succès!'
+    # Log image information if present
+    if menu_item_params[:image].present?
+      Rails.logger.info "MenuItem update - image present in params"
+      Rails.logger.info "MenuItem update - image temp file: #{menu_item_params[:image].tempfile.path if menu_item_params[:image].respond_to?(:tempfile)}"
+      Rails.logger.info "MenuItem update - image original filename: #{menu_item_params[:image].original_filename if menu_item_params[:image].respond_to?(:original_filename)}"
+      Rails.logger.info "MenuItem update - image content type: #{menu_item_params[:image].content_type if menu_item_params[:image].respond_to?(:content_type)}"
+      Rails.logger.info "MenuItem update - image size: #{menu_item_params[:image].size if menu_item_params[:image].respond_to?(:size)}"
     else
-      Rails.logger.error "MenuItem update failed: #{@menu_item.errors.full_messages.join(', ')}"
-      Rails.logger.error "MenuItem validation errors: #{@menu_item.errors.inspect}"
-      render :edit, status: :unprocessable_entity
+      Rails.logger.info "MenuItem update - no image in params"
+    end
+
+    begin
+      if @menu_item.update(menu_item_params)
+        Rails.logger.info "MenuItem updated successfully: #{@menu_item.name}"
+        Rails.logger.info "MenuItem has image attached: #{@menu_item.image.attached?}"
+        Rails.logger.info "=== MenuItem UPDATE SUCCESS ==="
+        redirect_to restaurant_admin_menu_items_path(restaurant_slug: @restaurant.slug), notice: 'Plat mis à jour avec succès!'
+      else
+        Rails.logger.error "MenuItem update failed: #{@menu_item.errors.full_messages.join(', ')}"
+        Rails.logger.error "MenuItem validation errors: #{@menu_item.errors.inspect}"
+        Rails.logger.error "=== MenuItem UPDATE FAILED ==="
+        render :edit, status: :unprocessable_entity
+      end
+    rescue => e
+      Rails.logger.error "MenuItem update exception: #{e.class.name} - #{e.message}"
+      Rails.logger.error "MenuItem update backtrace: #{e.backtrace.first(10).join("\n")}"
+      Rails.logger.error "=== MenuItem UPDATE EXCEPTION ==="
+      @menu_item.errors.add(:base, "Une erreur inattendue s'est produite lors de la mise à jour")
+      render :edit, status: :internal_server_error
     end
   end
 
@@ -91,5 +147,22 @@ class Admin::MenuItemsController < ApplicationController
 
   def menu_item_params
     params.require(:menu_item).permit(:name, :description, :price, :comment, :available, :position, :image)
+  end
+
+  private
+
+  def check_active_storage
+    Rails.logger.info "Checking Active Storage availability..."
+    Rails.logger.info "ActiveStorage defined: #{defined?(ActiveStorage)}"
+    Rails.logger.info "ActiveStorage::Blob defined: #{defined?(ActiveStorage::Blob)}"
+    Rails.logger.info "ActiveStorage::Attachment defined: #{defined?(ActiveStorage::Attachment)}"
+
+    # Test if we can create a basic Active Storage object
+    begin
+      blob = ActiveStorage::Blob.new
+      Rails.logger.info "Active Storage blob creation successful"
+    rescue => e
+      Rails.logger.error "Active Storage blob creation failed: #{e.message}"
+    end
   end
 end

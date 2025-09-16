@@ -80,6 +80,9 @@ class MenuItem < ApplicationRecord
   end
 
   def image_format_and_size
+    Rails.logger.info "=== IMAGE VALIDATION START ==="
+    Rails.logger.info "Image attached?: #{image.attached?}"
+
     return unless image.attached?
 
     Rails.logger.info "Validating image: #{image.filename}, size: #{image.byte_size}, content_type: #{image.content_type}"
@@ -98,8 +101,11 @@ class MenuItem < ApplicationRecord
     end
 
     Rails.logger.info "Image validation completed successfully"
+    Rails.logger.info "=== IMAGE VALIDATION END ==="
   rescue => e
     Rails.logger.error "Image validation error: #{e.message}"
+    Rails.logger.error "Image validation backtrace: #{e.backtrace.first(5).join("\n")}"
+    Rails.logger.error "=== IMAGE VALIDATION EXCEPTION ==="
     errors.add(:image, "Erreur lors du traitement de l'image")
   end
 end

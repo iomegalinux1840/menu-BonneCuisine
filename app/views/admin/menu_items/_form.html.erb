@@ -78,13 +78,33 @@
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('form');
   if (form) {
+    console.log('Form found, enctype:', form.enctype);
+
     form.addEventListener('submit', function(e) {
-      console.log('Form is being submitted');
+      console.log('=== FORM SUBMIT START ===');
+      console.log('Form action:', form.action);
+      console.log('Form method:', form.method);
+      console.log('Form enctype:', form.enctype);
+
+      const formData = new FormData(form);
+      console.log('Form data keys:', Array.from(formData.keys()));
+
       const imageInput = form.querySelector('input[type="file"]');
       if (imageInput && imageInput.files.length > 0) {
         console.log('Image file selected:', imageInput.files[0].name, 'Size:', imageInput.files[0].size, 'Type:', imageInput.files[0].type);
+        console.log('Image input name:', imageInput.name);
+      } else {
+        console.log('No image file selected');
       }
+
+      console.log('Authenticity token present:', formData.has('authenticity_token'));
+      console.log('=== FORM SUBMIT END ===');
     });
+
+    // Also log when form is created
+    console.log('Form initialized with multipart:', form.enctype.includes('multipart'));
+  } else {
+    console.log('Form not found');
   }
 });
 </script>
