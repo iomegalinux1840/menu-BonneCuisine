@@ -8,7 +8,7 @@ class MenuItem < ApplicationRecord
   # Validations
   validates :name, presence: true, length: { maximum: 255 }
   validates :price, presence: true, numericality: { greater_than: 0 }
-  validates :position, presence: true, uniqueness: { scope: :restaurant_id }
+  validates :position, presence: true
 
   # Custom image validation (Active Storage validators not loaded in all environments)
   validate :image_format_and_size
@@ -20,6 +20,7 @@ class MenuItem < ApplicationRecord
 
   # Callbacks
   before_validation :set_position, on: :create
+  before_save :handle_position_assignment
   after_save :broadcast_menu_update
   after_destroy :broadcast_menu_delete
 
@@ -31,6 +32,19 @@ class MenuItem < ApplicationRecord
     # Position should be unique per restaurant
     last_position = restaurant.menu_items.maximum(:position) || 0
     self.position = last_position + 1
+  end
+
+  def handle_position_assignment
+    return unless position_changed?
+
+    # Get the new position value
+    new_position = position
+
+    # Shift all other items with position >= new_position down by 1
+    # This includes items that currently have the same position
+    restaurant.menu_items
+              .where('position >= ? AND id != ?', new_position, id)
+              .update_all('position = position + 1')
   end
 
   def broadcast_menu_update

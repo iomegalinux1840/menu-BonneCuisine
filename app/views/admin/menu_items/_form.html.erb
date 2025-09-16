@@ -16,7 +16,7 @@
   </div>
 
   <div class="form-group">
-    <%= form.label :price, "Prix (€)", class: "form-label" %>
+    <%= form.label :price, "Prix ($)", class: "form-label" %>
     <%= form.number_field :price, step: 0.01, min: 0, class: "form-input", required: true %>
   </div>
 
@@ -47,7 +47,7 @@
   <div class="form-group">
     <%= form.label :position, "Position dans le menu", class: "form-label" %>
     <%= form.number_field :position, min: 1, class: "form-input" %>
-    <small class="form-help">Laissez vide pour placer à la fin</small>
+    <small class="form-help">Les autres plats seront automatiquement réorganisés</small>
   </div>
 
   <div class="form-group">
