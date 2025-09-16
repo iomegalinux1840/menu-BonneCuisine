@@ -71,21 +71,44 @@
   </head>
 
   <body>
-    <div class="menu-header">
+    <!-- Blue Header Bar -->
+    <nav class="restaurant-nav">
+      <div class="nav-content">
+        <h1><%= @restaurant_branding[:name] %></h1>
+        <div class="nav-actions">
+          <a href="<%= restaurant_admin_login_path(restaurant_slug: params[:restaurant_slug]) %>" class="admin-link">
+            🔧 Administration
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="restaurant-container">
+      <!-- Restaurant Branding Header -->
       <% if @restaurant_branding[:logo_url].present? %>
-        <%= image_tag @restaurant_branding[:logo_url], class: "restaurant-logo", alt: @restaurant_branding[:name] %>
+        <div class="restaurant-header">
+          <div class="logo-container">
+            <div class="logo-wrapper">
+              <%= image_tag @restaurant_branding[:logo_url], class: "restaurant-logo", alt: @restaurant_branding[:name] %>
+            </div>
+          </div>
+        </div>
       <% end %>
-      <h1><%= @restaurant_branding[:name] %></h1>
-      <p class="tagline">Notre Menu</p>
+
+      <!-- Menu Content -->
+      <main>
+        <%= yield %>
+      </main>
+
+      <!-- Footer -->
+      <footer class="restaurant-footer">
+        <p>&copy; <%= Date.current.year %> <%= @restaurant_branding[:name] %>. Tous droits réservés.</p>
+        <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">
+          Propulsé par MenuPlatform
+        </p>
+      </footer>
     </div>
-
-    <main class="container">
-      <%= yield %>
-    </main>
-
-    <footer class="menu-footer">
-      <p>&copy; <%= Date.current.year %> <%= @restaurant_branding[:name] %>. Tous droits réservés.</p>
-    </footer>
 
     <%= turbo_stream_from "menu_channel_#{current_restaurant.id}" if current_restaurant %>
   </body>

@@ -22,15 +22,63 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   line-height: 1.6;
   color: var(--text-dark);
-  background: #f5f7fa; // Same background as admin page
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8f4fd 50%, #f0f8ff 100%);
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 // Restaurant Public Styles
+.restaurant-nav {
+  background: var(--primary-blue);
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+
+  .nav-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    margin: 0;
+    color: white;
+  }
+
+  .nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .admin-link {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
 .restaurant-container {
-  max-width: 1600px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 15px;
+  padding: 2rem;
 }
 
 .restaurant-header {
@@ -91,30 +139,31 @@ body {
 }
 
 .menu-section {
-  margin-bottom: 3rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
 }
 
 .menu-title {
   font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   text-align: center;
   color: var(--primary-blue);
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   font-weight: 700;
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-  max-width: 600px;
-  margin: 2rem auto 2rem auto;
+  position: relative;
 
   &::after {
     content: '';
     display: block;
-    width: 60px;
+    width: 80px;
     height: 3px;
     background: var(--primary-blue);
-    margin: 1rem auto 0 auto;
+    margin: 1.2rem auto 0 auto;
+    border-radius: 2px;
   }
 }
 
@@ -147,20 +196,22 @@ body {
 }
 
 .menu-item {
-  background: white;
+  background: #fafbfc;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1.75rem;
   box-shadow: var(--shadow);
   transition: all 0.3s ease;
-  border: 1px solid var(--border-light);
-  min-height: 220px;
+  border: 1px solid #e8f0fe;
+  min-height: 240px;
   display: flex;
   flex-direction: column;
   position: relative;
 
   &:hover {
     box-shadow: var(--shadow-hover);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    background: white;
+    border-color: var(--primary-blue);
   }
 }
 
@@ -198,13 +249,14 @@ body {
 .menu-item-price {
   font-weight: 700;
   font-size: 1.3rem;
-  color: var(--dark-blue);
-  white-space: nowrap;
-  background: var(--primary-blue);
   color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
+  white-space: nowrap;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+  padding: 0.4rem 1rem;
+  border-radius: 25px;
   font-size: 1.1rem;
+  box-shadow: 0 2px 4px rgba(43, 87, 151, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .menu-item-description {
@@ -630,7 +682,11 @@ body {
   }
 
   .restaurant-container {
-    padding: 1rem;
+    padding: 1.5rem;
+  }
+
+  .restaurant-nav .nav-content {
+    padding: 0 1.5rem;
   }
 }
 
@@ -640,15 +696,41 @@ body {
     gap: 1.5rem;
   }
 
+  .restaurant-nav {
+    .nav-content {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+      padding: 0 1rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .nav-actions {
+      width: 100%;
+    }
+
+    .admin-link {
+      width: 100%;
+      text-align: center;
+      padding: 0.75rem;
+    }
+  }
+
+  .restaurant-container {
+    padding: 1rem;
+  }
+
   .restaurant-header {
     margin: 1rem auto;
     padding: 1.5rem 1rem;
   }
 
   .menu-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
     margin: 1.5rem auto;
-    padding: 1rem;
   }
 
   .menu-item {
@@ -662,6 +744,10 @@ body {
 
   .restaurant-footer {
     margin: 2rem auto;
+    padding: 1.5rem;
+  }
+
+  .menu-section {
     padding: 1.5rem;
   }
 }
