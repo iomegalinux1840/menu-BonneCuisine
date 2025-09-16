@@ -3,7 +3,12 @@ class MenuItem < ApplicationRecord
   belongs_to :restaurant
 
   # Active Storage for image uploads
-  has_one_attached :image
+  has_one_attached :image do |attachable|
+    # Temporarily disable variants to troubleshoot upload issues
+    # attachable.variant :thumb, resize_to_limit: [200, 200]
+    # attachable.variant :medium, resize_to_limit: [400, 400]
+    # attachable.variant :large, resize_to_limit: [800, 600]
+  end
 
   # Validations
   validates :name, presence: true, length: { maximum: 255 }
@@ -77,14 +82,24 @@ class MenuItem < ApplicationRecord
   def image_format_and_size
     return unless image.attached?
 
+    Rails.logger.info "Validating image: #{image.filename}, size: #{image.byte_size}, content_type: #{image.content_type}"
+
     # Check file size
     if image.byte_size > 5.megabytes
+      Rails.logger.warn "Image too large: #{image.byte_size} bytes"
       errors.add(:image, "ne doit pas dépasser 5MB")
     end
 
-    # Check file type
-    unless image.content_type.in?(%w[image/jpeg image/png image/gif image/webp])
+    # Check file type - more lenient for now
+    allowed_types = %w[image/jpeg image/png image/gif image/webp image/jpg]
+    unless image.content_type.in?(allowed_types)
+      Rails.logger.warn "Invalid image type: #{image.content_type}"
       errors.add(:image, "doit être un format d'image valide (JPG, PNG, GIF, WebP)")
     end
+
+    Rails.logger.info "Image validation completed successfully"
+  rescue => e
+    Rails.logger.error "Image validation error: #{e.message}"
+    errors.add(:image, "Erreur lors du traitement de l'image")
   end
 end

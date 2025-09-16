@@ -29,9 +29,13 @@ class Admin::MenuItemsController < ApplicationController
   end
 
   def update
+    Rails.logger.info "MenuItem update - params: #{menu_item_params.inspect}"
+
     if @menu_item.update(menu_item_params)
+      Rails.logger.info "MenuItem updated successfully: #{@menu_item.name}"
       redirect_to restaurant_admin_menu_items_path(restaurant_slug: @restaurant.slug), notice: 'Plat mis à jour avec succès!'
     else
+      Rails.logger.error "MenuItem update failed: #{@menu_item.errors.full_messages.join(', ')}"
       render :edit, status: :unprocessable_entity
     end
   end

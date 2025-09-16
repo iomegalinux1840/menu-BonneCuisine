@@ -34,6 +34,10 @@ Rails.application.routes.draw do
   # Mount ActionCable for all domains
   mount ActionCable.server => '/cable'
 
+  # Active Storage routes for file uploads
+  # This is required for direct uploads to work
+  # mount ActiveStorage::Engine => '/rails/active_storage'
+
   # Check for Railway environment (multi-tenant routing)
   if ENV['RAILWAY_ENVIRONMENT'].present? || ENV['RAILS_ENV'] == 'production'
     # Root shows list of restaurants
