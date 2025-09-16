@@ -1,15 +1,10 @@
 <div class="menu-item <%= 'has-image' if menu_item.image.attached? %>" data-menu-item-id="<%= menu_item.id %>">
-  <% begin %>
-    <% if menu_item.image.attached? %>
-      <div class="menu-item-image">
-        <%= image_tag menu_item.image.variant(:card), alt: menu_item.name, class: "menu-item-photo" %>
-      </div>
-    <% else %>
-      <div class="menu-item-image-placeholder">
-        <div class="placeholder-icon">🍽️</div>
-      </div>
-    <% end %>
-  <% rescue => e %>
+  <!-- Debug info: <%= menu_item.name %> - Image attached: <%= menu_item.image.attached? %> -->
+  <% if menu_item.image.attached? %>
+    <div class="menu-item-image">
+      <%= image_tag menu_item.image.variant(:card), alt: menu_item.name, class: "menu-item-photo" %>
+    </div>
+  <% else %>
     <div class="menu-item-image-placeholder">
       <div class="placeholder-icon">🍽️</div>
     </div>

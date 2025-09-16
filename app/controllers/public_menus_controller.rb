@@ -19,6 +19,14 @@ class PublicMenusController < ApplicationController
 
     Rails.logger.debug "Found #{@menu_items.count} menu items for restaurant"
 
+    # Debug image attachment status
+    @menu_items.each do |item|
+      Rails.logger.debug "MenuItem: #{item.name} - Image attached: #{item.image.attached?}"
+      if item.image.attached?
+        Rails.logger.debug "  Image details: #{item.image.blob.inspect}"
+      end
+    end
+
     # Support for embeddable widget
     if params[:embed] == 'true'
       render layout: 'embed'
