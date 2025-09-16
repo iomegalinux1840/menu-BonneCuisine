@@ -5,7 +5,7 @@
   </div>
 
   <div class="form-container">
-    <%= form_with model: @menu_item, url: restaurant_admin_menu_item_path(restaurant_slug: params[:restaurant_slug], id: @menu_item), local: true, class: "admin-form", method: :patch do |form| %>
+    <%= form_with model: @menu_item, url: restaurant_admin_menu_item_path(restaurant_slug: params[:restaurant_slug], id: @menu_item), local: true, class: "admin-form", method: :patch, multipart: true do |form| %>
       <%= render 'form', form: form %>
     <% end %>
   </div>

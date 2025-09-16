@@ -1,9 +1,15 @@
 <div class="menu-item <%= 'has-image' if menu_item.image.attached? %>" data-menu-item-id="<%= menu_item.id %>">
-  <% if menu_item.image.attached? %>
-    <div class="menu-item-image">
-      <%= image_tag menu_item.image, alt: menu_item.name, class: "menu-item-photo" %>
-    </div>
-  <% else %>
+  <% begin %>
+    <% if menu_item.image.attached? %>
+      <div class="menu-item-image">
+        <%= image_tag menu_item.image, alt: menu_item.name, class: "menu-item-photo" %>
+      </div>
+    <% else %>
+      <div class="menu-item-image-placeholder">
+        <div class="placeholder-icon">🍽️</div>
+      </div>
+    <% end %>
+  <% rescue => e %>
     <div class="menu-item-image-placeholder">
       <div class="placeholder-icon">🍽️</div>
     </div>

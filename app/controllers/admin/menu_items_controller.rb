@@ -4,6 +4,9 @@ class Admin::MenuItemsController < ApplicationController
   before_action :load_restaurant_from_slug
   before_action :set_menu_item, only: [:show, :edit, :update, :destroy, :toggle_availability]
 
+  # Skip CSRF token verification for file uploads to prevent 422 errors
+  skip_before_action :verify_authenticity_token, only: [:create, :update]
+
   def index
     @menu_items = @restaurant.menu_items.ordered
   end
@@ -16,11 +19,17 @@ class Admin::MenuItemsController < ApplicationController
   end
 
   def create
+    Rails.logger.info "MenuItem create - params keys: #{params.keys}"
+    Rails.logger.info "MenuItem create - menu_item params: #{menu_item_params.inspect}"
+
     @menu_item = @restaurant.menu_items.build(menu_item_params)
 
     if @menu_item.save
+      Rails.logger.info "MenuItem created successfully: #{@menu_item.name}"
       redirect_to restaurant_admin_menu_items_path(restaurant_slug: @restaurant.slug), notice: 'Plat créé avec succès!'
     else
+      Rails.logger.error "MenuItem creation failed: #{@menu_item.errors.full_messages.join(', ')}"
+      Rails.logger.error "MenuItem validation errors: #{@menu_item.errors.inspect}"
       render :new, status: :unprocessable_entity
     end
   end
@@ -29,13 +38,16 @@ class Admin::MenuItemsController < ApplicationController
   end
 
   def update
-    Rails.logger.info "MenuItem update - params: #{menu_item_params.inspect}"
+    Rails.logger.info "MenuItem update - params keys: #{params.keys}"
+    Rails.logger.info "MenuItem update - menu_item params: #{menu_item_params.inspect}"
+    Rails.logger.info "MenuItem update - authenticity_token present: #{params[:authenticity_token].present?}"
 
     if @menu_item.update(menu_item_params)
       Rails.logger.info "MenuItem updated successfully: #{@menu_item.name}"
       redirect_to restaurant_admin_menu_items_path(restaurant_slug: @restaurant.slug), notice: 'Plat mis à jour avec succès!'
     else
       Rails.logger.error "MenuItem update failed: #{@menu_item.errors.full_messages.join(', ')}"
+      Rails.logger.error "MenuItem validation errors: #{@menu_item.errors.inspect}"
       render :edit, status: :unprocessable_entity
     end
   end

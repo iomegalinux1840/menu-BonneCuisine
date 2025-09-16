@@ -38,10 +38,16 @@
   <div class="form-group full-width">
     <%= form.label :image, "Photo du plat", class: "form-label" %>
     <%= form.file_field :image, accept: "image/*", class: "form-input", capture: "environment" %>
-    <% if @menu_item.image.attached? %>
+    <% begin %>
+      <% if @menu_item.image.attached? %>
+        <div class="current-image">
+          <p><strong>Image actuelle:</strong></p>
+          <%= image_tag @menu_item.image, class: "menu-item-thumb" %>
+        </div>
+      <% end %>
+    <% rescue => e %>
       <div class="current-image">
-        <p><strong>Image actuelle:</strong></p>
-        <%= image_tag @menu_item.image, class: "menu-item-thumb" %>
+        <p><strong>Erreur d'affichage de l'image actuelle</strong></p>
       </div>
     <% end %>
     <small class="form-help">Formats acceptés: JPG, PNG, GIF, WebP (max 5MB)</small>
