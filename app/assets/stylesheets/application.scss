@@ -202,7 +202,7 @@ body {
   box-shadow: var(--shadow);
   transition: all 0.3s ease;
   border: 1px solid #e8f0fe;
-  min-height: 240px;
+  min-height: 320px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -216,16 +216,47 @@ body {
 }
 
 .menu-item-image {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   text-align: center;
+  flex-shrink: 0;
 
   .menu-item-photo {
     width: 100%;
-    max-width: 300px;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 280px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
   }
+
+  &:hover .menu-item-photo {
+    transform: scale(1.02);
+  }
+}
+
+.menu-item-image-placeholder {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 180px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 10px;
+  border: 2px dashed #dee2e6;
+
+  .placeholder-icon {
+    font-size: 3rem;
+    opacity: 0.6;
+  }
+}
+
+.menu-item.has-image {
+  background: white;
+  border-color: var(--primary-blue);
+  box-shadow: 0 4px 12px rgba(43, 87, 151, 0.15);
 }
 
 .menu-item-header {
@@ -249,14 +280,14 @@ body {
 .menu-item-price {
   font-weight: 700;
   font-size: 1.3rem;
-  color: white;
+  color: var(--primary-blue);
   white-space: nowrap;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
-  padding: 0.4rem 1rem;
+  background: white;
+  padding: 0.5rem 1.2rem;
   border-radius: 25px;
   font-size: 1.1rem;
-  box-shadow: 0 2px 4px rgba(43, 87, 151, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--primary-blue);
 }
 
 .menu-item-description {
@@ -735,11 +766,21 @@ body {
 
   .menu-item {
     padding: 1.25rem;
-    min-height: 200px;
+    min-height: 280px;
+  }
+
+  .menu-item-image .menu-item-photo {
+    height: 140px;
+    max-width: 240px;
   }
 
   .menu-item-name {
     font-size: 1.3rem;
+  }
+
+  .menu-item-price {
+    font-size: 1rem;
+    padding: 0.4rem 1rem;
   }
 
   .restaurant-footer {
