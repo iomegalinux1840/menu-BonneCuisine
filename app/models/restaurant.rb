@@ -3,6 +3,9 @@ class Restaurant < ApplicationRecord
   has_many :menu_items, dependent: :destroy
   has_many :admins, dependent: :destroy
 
+  MENU_IMAGE_SIZES = %w[small large].freeze
+  MENU_GRID_COLUMN_RANGE = (3..6).freeze
+
   # Validations
   validates :name, presence: true, length: { maximum: 100 }
   validates :slug, presence: true, uniqueness: true,
@@ -15,6 +18,8 @@ class Restaurant < ApplicationRecord
   validates :custom_domain, uniqueness: { allow_blank: true },
             format: { with: /\A[a-z0-9.-]+\z/, message: "invalid domain format" },
             allow_blank: true
+  validates :menu_image_size, inclusion: { in: MENU_IMAGE_SIZES }
+  validates :menu_grid_columns, inclusion: { in: MENU_GRID_COLUMN_RANGE }
 
   # Reserved subdomains that cannot be used
   RESERVED_SUBDOMAINS = %w[
@@ -64,6 +69,14 @@ class Restaurant < ApplicationRecord
     "#{base_domain}/#{slug}"
   end
 
+  def layout_settings
+    {
+      image_size: menu_image_size.presence || 'small',
+      grid_columns: menu_grid_columns.presence || 3,
+      message_of_the_day: message_of_the_day
+    }
+  end
+
   private
 
   def base_domain
@@ -104,5 +117,7 @@ class Restaurant < ApplicationRecord
     self.secondary_color ||= '#F5DEB3'
     self.font_family ||= 'Playfair Display'
     self.timezone ||= 'America/Toronto'
+    self.menu_image_size ||= 'small'
+    self.menu_grid_columns ||= 3
   end
 end

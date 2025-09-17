@@ -11,7 +11,10 @@ restaurant = Restaurant.create!(
   primary_color: '#8B4513',
   secondary_color: '#F5DEB3',
   font_family: 'Playfair Display',
-  timezone: 'America/Toronto'
+  timezone: 'America/Toronto',
+  menu_grid_columns: 4,
+  menu_image_size: 'large',
+  message_of_the_day: "Essayez notre poutine du mois garnie de bacon fumé!"
 )
 
 puts "Restaurant créé: #{restaurant.name} (slug: #{restaurant.slug})"
@@ -145,7 +148,10 @@ pizza_restaurant = Restaurant.create!(
   primary_color: '#D32F2F',
   secondary_color: '#FFF3E0',
   font_family: 'Roboto Slab',
-  timezone: 'America/Toronto'
+  timezone: 'America/Toronto',
+  menu_grid_columns: 5,
+  menu_image_size: 'small',
+  message_of_the_day: "🍕 Promo midi : 2 pointes + breuvage à 9,99$!"
 )
 
 pizza_admin = Admin.create!(

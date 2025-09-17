@@ -8,6 +8,9 @@ pizza_place = Restaurant.find_or_create_by!(slug: "tonys-pizza") do |r|
   r.secondary_color = "#FFF3E0"
   r.font_family = "Roboto Slab"
   r.timezone = "America/Toronto"
+  r.menu_grid_columns = 5
+  r.menu_image_size = 'small'
+  r.message_of_the_day = "Pizza du chef : garniture surprise disponible aujourd'hui!"
 end
 
 # Create admin for pizza place
@@ -82,6 +85,9 @@ sushi_bar = Restaurant.find_or_create_by!(slug: "sakura-sushi") do |r|
   r.secondary_color = "#E3F2FD"
   r.font_family = "Noto Sans"
   r.timezone = "America/Toronto"
+  r.menu_grid_columns = 3
+  r.menu_image_size = 'large'
+  r.message_of_the_day = "Assortiment spécial sakura offert pour une durée limitée."
 end
 
 # Create admin for sushi bar

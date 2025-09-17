@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_15_234819) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_16_220000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -85,6 +85,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_15_234819) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "menu_image_size", default: "small", null: false
+    t.integer "menu_grid_columns", default: 3, null: false
+    t.text "message_of_the_day"
     t.index ["custom_domain"], name: "index_restaurants_on_custom_domain", unique: true
     t.index ["slug"], name: "index_restaurants_on_slug", unique: true
     t.index ["subdomain"], name: "index_restaurants_on_subdomain", unique: true

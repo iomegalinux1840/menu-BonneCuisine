@@ -1,7 +1,4 @@
-class Admin::MenuItemsController < ApplicationController
-  layout 'admin'
-  before_action :authenticate_admin!
-  before_action :load_restaurant_from_slug
+class Admin::MenuItemsController < Admin::BaseController
   before_action :set_menu_item, only: [:show, :edit, :update, :destroy, :toggle_availability]
 
   # Skip CSRF token verification for file uploads to prevent 422 errors
@@ -182,22 +179,6 @@ class Admin::MenuItemsController < ApplicationController
 
   private
 
-  def load_restaurant_from_slug
-    @restaurant = Restaurant.active.find_by(slug: params[:restaurant_slug])
-    unless @restaurant
-      Rails.logger.error "Restaurant not found for menu items: #{params[:restaurant_slug]}"
-      respond_to do |format|
-        format.html { render plain: "404 Restaurant Not Found", status: :not_found }
-        format.json { render json: { error: "Restaurant not found" }, status: :not_found }
-      end
-      return
-    end
-
-    # Ensure admin belongs to this restaurant
-    if current_admin && current_admin.restaurant_id != @restaurant.id
-      redirect_to root_path, alert: 'Access denied'
-    end
-  end
 
   def set_menu_item
     @menu_item = @restaurant.menu_items.find(params[:id])

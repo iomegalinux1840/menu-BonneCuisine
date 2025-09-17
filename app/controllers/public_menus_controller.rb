@@ -17,6 +17,8 @@ class PublicMenusController < ApplicationController
                                     .ordered
                                     .limit(12)
 
+    @menu_layout = current_restaurant.layout_settings
+
     Rails.logger.debug "Found #{@menu_items.count} menu items for restaurant"
 
     # Debug image attachment status

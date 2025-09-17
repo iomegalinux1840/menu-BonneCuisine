@@ -27,6 +27,18 @@
       </div>
     </nav>
 
+    <% if admin_logged_in? %>
+      <% current_slug = @restaurant&.slug || params[:restaurant_slug] %>
+      <% if current_slug.present? %>
+        <div class="admin-tabs" role="navigation" aria-label="Navigation administration">
+          <%= link_to "Menu", restaurant_admin_menu_items_path(restaurant_slug: current_slug),
+                      class: "admin-tab #{'active' if controller_path == 'admin/menu_items'}" %>
+          <%= link_to "Mise en page", restaurant_admin_layout_path(restaurant_slug: current_slug),
+                      class: "admin-tab #{'active' if controller_path == 'admin/layouts'}" %>
+        </div>
+      <% end %>
+    <% end %>
+
     <main class="admin-main">
       <% if notice %>
         <div class="alert alert-success"><%= notice %></div>

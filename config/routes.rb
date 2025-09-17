@@ -62,6 +62,7 @@ Rails.application.routes.draw do
           patch :toggle_availability
         end
       end
+      resource :layout, controller: 'admin/layouts', only: [:show, :update]
       resources :settings, controller: 'admin/settings', only: [:index, :update]
       resources :admins, controller: 'admin/admins'
     end
@@ -101,6 +102,7 @@ Rails.application.routes.draw do
               patch :toggle_availability
             end
           end
+          resource :layout, only: [:show, :update]
           resources :settings, only: [:index, :update]
           resources :admins
         end
@@ -139,6 +141,7 @@ Rails.application.routes.draw do
             patch :toggle_availability
           end
         end
+        resource :layout, only: [:show, :update]
       end
     end
 
