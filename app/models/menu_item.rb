@@ -4,11 +4,11 @@ class MenuItem < ApplicationRecord
 
   # Active Storage for image uploads
   has_one_attached :image do |attachable|
-    # Menu display variants - optimized for responsive design
-    attachable.variant :thumb, resize_to_fill: [150, 150], convert: :jpg, saver: { quality: 80 }
-    attachable.variant :card, resize_to_fill: [250, 200], convert: :jpg, saver: { quality: 85 }
-    attachable.variant :medium, resize_to_limit: [400, 300], convert: :jpg, saver: { quality: 85 }
-    attachable.variant :large, resize_to_limit: [800, 600], convert: :jpg, saver: { quality: 90 }
+    # Menu display variants - use conservative operations supported in all environments
+    attachable.variant :thumb, resize_to_fill: [150, 150]
+    attachable.variant :card, resize_to_fill: [250, 200]
+    attachable.variant :medium, resize_to_limit: [400, 300]
+    attachable.variant :large, resize_to_limit: [800, 600]
   end
 
   # Validations
