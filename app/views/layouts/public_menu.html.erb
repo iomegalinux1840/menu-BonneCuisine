@@ -110,6 +110,6 @@
       </footer>
     </div>
 
-    <%= turbo_stream_from "menu_channel_#{current_restaurant.id}" if current_restaurant %>
+    <%= turbo_stream_from [current_restaurant, :menu] if current_restaurant %>
   </body>
 </html>

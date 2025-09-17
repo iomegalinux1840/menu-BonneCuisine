@@ -95,30 +95,30 @@ class MenuItem < ApplicationRecord
   end
 
   def broadcast_menu_update
-    # Broadcast simple update notification instead of rendering HTML
-    # This avoids potential rendering issues in production
-    ActionCable.server.broadcast(
-      "menu_channel_#{restaurant.id}",
-      {
-        action: "update",
-        menu_item_id: self.id
-      }
-    )
+    broadcast_menu_refresh
   rescue => e
     Rails.logger.warn "Broadcasting error: #{e.message}"
   end
 
   def broadcast_menu_delete
-    # Send delete action with restaurant-specific channel
-    ActionCable.server.broadcast(
-      "menu_channel_#{restaurant.id}",
-      {
-        action: "delete",
-        id: self.id
-      }
-    )
+    broadcast_menu_refresh
   rescue => e
     Rails.logger.warn "Broadcasting error: #{e.message}"
+  end
+
+  def broadcast_menu_refresh
+    menu_items = restaurant.menu_items.available.ordered.limit(12)
+    menu_layout = restaurant.layout_settings
+
+    Turbo::StreamsChannel.broadcast_replace_to(
+      [restaurant, :menu],
+      target: "menu-content",
+      partial: "public_menus/menu_content",
+      locals: {
+        menu_items: menu_items,
+        menu_layout: menu_layout
+      }
+    )
   end
 
   def image_format_and_size

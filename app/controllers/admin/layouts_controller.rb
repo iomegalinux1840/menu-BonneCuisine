@@ -24,7 +24,7 @@ class Admin::LayoutsController < Admin::BaseController
     menu_layout = @restaurant.layout_settings
 
     Turbo::StreamsChannel.broadcast_replace_to(
-      "menu_channel_#{@restaurant.id}",
+      [@restaurant, :menu],
       target: "menu-content",
       partial: "public_menus/menu_content",
       locals: {
