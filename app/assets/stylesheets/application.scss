@@ -432,6 +432,16 @@ body {
     display: flex;
     gap: 1rem;
   }
+
+  .btn.btn-outline {
+    color: white;
+    border-color: rgba(255, 255, 255, 0.85);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+  }
 }
 
 .admin-tabs {
