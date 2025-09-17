@@ -1,17 +1,10 @@
 <div class="menu-container">
-  <div id="menu-items" class="menu-grid">
-    <% @menu_items.each do |item| %>
-      <div class="menu-item" data-item-id="<%= item.id %>">
-        <h3 class="menu-item-name"><%= item.name %></h3>
-        <p class="menu-item-description"><%= item.description %></p>
-        <div class="menu-item-footer">
-          <span class="menu-item-price">$<%= '%.2f' % item.price %></span>
-          <% if item.comment.present? %>
-            <span class="menu-item-notes"><%= item.comment %></span>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
+  <header class="menu-header">
+    <h2 class="menu-title">Notre Carte</h2>
+  </header>
+
+  <div class="menu-grid" id="menu-grid">
+    <%= render partial: "menu_items/menu_item", collection: @menu_items, as: :menu_item %>
   </div>
 
   <% if @menu_items.empty? %>
