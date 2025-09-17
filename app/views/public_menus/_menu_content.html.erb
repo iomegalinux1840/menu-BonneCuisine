@@ -1,0 +1,20 @@
+<% if menu_layout[:message_of_the_day].present? %>
+  <section class="menu-message" role="complementary">
+    <div class="menu-message-body"><%= simple_format(menu_layout[:message_of_the_day]) %></div>
+  </section>
+<% end %>
+
+<div class="menu-grid image-<%= menu_layout[:image_size] %>"
+     id="menu-grid"
+     data-columns="<%= menu_layout[:grid_columns] %>">
+  <%= render partial: "menu_items/menu_item",
+             collection: menu_items,
+             as: :menu_item,
+             locals: { layout_settings: menu_layout } %>
+</div>
+
+<% if menu_items.empty? %>
+  <div class="empty-menu">
+    <p>Aucun plat disponible pour le moment.</p>
+  </div>
+<% end %>
