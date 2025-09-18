@@ -4,7 +4,9 @@
   </section>
 <% end %>
 
-<% if ENV['STRIPE_PRICING_TABLE_ID'].present? && ENV['STRIPE_PUBLISHABLE_KEY'].present? %>
+<% pricing_table_enabled = ENV['STRIPE_PRICING_TABLE_ENABLED'].to_s.casecmp('true').zero? %>
+
+<% if pricing_table_enabled && ENV['STRIPE_PRICING_TABLE_ID'].present? && ENV['STRIPE_PUBLISHABLE_KEY'].present? %>
   <section class="subscription-pricing-table">
     <stripe-pricing-table
       pricing-table-id="<%= ENV['STRIPE_PRICING_TABLE_ID'] %>"
