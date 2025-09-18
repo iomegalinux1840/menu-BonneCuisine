@@ -29,9 +29,23 @@ class PublicMenusController < ApplicationController
       end
     end
 
-    # Support for embeddable widget
-    if params[:embed] == 'true'
-      render layout: 'embed'
+    respond_to do |format|
+      format.html do
+        # Support for embeddable widget
+        if params[:embed] == 'true'
+          render layout: 'embed'
+        end
+      end
+
+      format.json do
+        render json: {
+          html: render_to_string(
+            partial: 'public_menus/menu_content',
+            formats: [:html],
+            locals: { menu_items: @menu_items, menu_layout: @menu_layout }
+          )
+        }
+      end
     end
   end
 

@@ -9,6 +9,11 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
 
+    <% if ENV['STRIPE_PUBLISHABLE_KEY'].present? %>
+      <meta name="stripe-publishable-key" content="<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>">
+      <script src="https://js.stripe.com/v3/"></script>
+    <% end %>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -70,7 +75,8 @@
     </style>
   </head>
 
-  <body>
+  <body data-restaurant-id="<%= current_restaurant&.id %>"
+        data-menu-refresh-url="<%= "#{request.path}.json" %>">
     <!-- Blue Header Bar -->
     <nav class="restaurant-nav">
       <div class="nav-content">
@@ -110,6 +116,5 @@
       </footer>
     </div>
 
-    <%= turbo_stream_from [current_restaurant, :menu] if current_restaurant %>
   </body>
 </html>

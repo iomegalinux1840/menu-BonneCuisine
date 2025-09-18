@@ -1,86 +1,71 @@
 import { createConsumer } from "@rails/actioncable"
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
+  const body = document.body
+  if (!body) return
+
+  const restaurantId = body.dataset.restaurantId
+  const refreshUrl = body.dataset.menuRefreshUrl
+
+  if (!restaurantId || !refreshUrl) {
+    return
+  }
+
   const consumer = createConsumer()
+  let refreshing = false
 
-  consumer.subscriptions.create("MenuChannel", {
-    connected() {
-      console.log("Connected to MenuChannel")
-    },
+  consumer.subscriptions.create(
+    { channel: "MenuChannel", restaurant_id: restaurantId },
+    {
+      connected() {
+        console.log("Connected to MenuChannel", restaurantId)
+      },
 
-    disconnected() {
-      console.log("Disconnected from MenuChannel")
-    },
+      disconnected() {
+        console.log("Disconnected from MenuChannel", restaurantId)
+      },
 
-    received(data) {
-      if (data.type === 'menu_updated') {
-        updateMenuDisplay(data.menu_items)
+      received(data) {
+        if (data && data.action === 'refresh') {
+          refreshMenu()
+        }
       }
     }
-  })
+  )
 
-  function updateMenuDisplay(menuItems) {
-    const menuGrid = document.getElementById('menu-grid')
-    if (!menuGrid) return
+  function refreshMenu() {
+    if (refreshing) return
+    refreshing = true
 
-    // Clear current menu items
-    menuGrid.innerHTML = ''
-
-    // Add updated menu items
-    menuItems.slice(0, 12).forEach(item => {
-      const menuItemElement = createMenuItemElement(item)
-      menuGrid.appendChild(menuItemElement)
+    fetch(refreshUrl, {
+      headers: {
+        'Accept': 'application/json'
+      },
+      credentials: 'same-origin'
     })
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`)
+        return response.json()
+      })
+      .then(payload => {
+        if (!payload || !payload.html) return
 
-    // Add fade-in animation
-    menuGrid.classList.add('updating')
-    setTimeout(() => {
-      menuGrid.classList.remove('updating')
-    }, 300)
-  }
+        const container = document.getElementById('menu-content')
+        if (!container) return
 
-  function createMenuItemElement(item) {
-    const div = document.createElement('div')
-    div.className = 'menu-item'
-    div.setAttribute('data-menu-item-id', item.id)
+        container.innerHTML = payload.html
 
-    const headerDiv = document.createElement('div')
-    headerDiv.className = 'menu-item-header'
-
-    const nameH3 = document.createElement('h3')
-    nameH3.className = 'menu-item-name'
-    nameH3.textContent = item.name
-
-    const priceSpan = document.createElement('span')
-    priceSpan.className = 'menu-item-price'
-    priceSpan.textContent = formatPrice(item.price)
-
-    headerDiv.appendChild(nameH3)
-    headerDiv.appendChild(priceSpan)
-    div.appendChild(headerDiv)
-
-    if (item.description) {
-      const descriptionP = document.createElement('p')
-      descriptionP.className = 'menu-item-description'
-      descriptionP.innerHTML = item.description.replace(/\n/g, '<br>')
-      div.appendChild(descriptionP)
-    }
-
-    if (item.comment) {
-      const commentP = document.createElement('p')
-      commentP.className = 'menu-item-comment'
-      commentP.innerHTML = item.comment.replace(/\n/g, '<br>')
-      div.appendChild(commentP)
-    }
-
-    return div
-  }
-
-  function formatPrice(price) {
-    return new Intl.NumberFormat('fr-FR', {
-      style: 'currency',
-      currency: 'EUR',
-      minimumFractionDigits: 2
-    }).format(price)
+        const grid = container.querySelector('.menu-grid')
+        if (grid) {
+          grid.classList.add('updating')
+          setTimeout(() => grid.classList.remove('updating'), 300)
+        }
+      })
+      .catch(error => {
+        console.warn('Unable to refresh menu content', error)
+      })
+      .finally(() => {
+        refreshing = false
+      })
   }
 })

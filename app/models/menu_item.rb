@@ -107,18 +107,7 @@ class MenuItem < ApplicationRecord
   end
 
   def broadcast_menu_refresh
-    menu_items = restaurant.menu_items.available.ordered.limit(12)
-    menu_layout = restaurant.layout_settings
-
-    Turbo::StreamsChannel.broadcast_replace_to(
-      [restaurant, :menu],
-      target: "menu-content",
-      partial: "public_menus/menu_content",
-      locals: {
-        menu_items: menu_items,
-        menu_layout: menu_layout
-      }
-    )
+    MenuChannel.broadcast_to(restaurant, { action: 'refresh', source: 'menu_item' })
   end
 
   def image_format_and_size

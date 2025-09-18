@@ -20,18 +20,7 @@ class Admin::LayoutsController < Admin::BaseController
   end
 
   def broadcast_layout_update
-    menu_items = @restaurant.menu_items.available.ordered.limit(12)
-    menu_layout = @restaurant.layout_settings
-
-    Turbo::StreamsChannel.broadcast_replace_to(
-      [@restaurant, :menu],
-      target: "menu-content",
-      partial: "public_menus/menu_content",
-      locals: {
-        menu_items: menu_items,
-        menu_layout: menu_layout
-      }
-    )
+    MenuChannel.broadcast_to(@restaurant, { action: 'refresh', source: 'layout' })
   rescue => e
     Rails.logger.warn "Layout broadcast failed: #{e.message}"
   end
