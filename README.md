@@ -114,6 +114,7 @@ STRIPE_PUBLISHABLE_KEY=pk_live...
 STRIPE_PRICE_ID=price_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 STRIPE_PRICING_TABLE_ID=prctbl_...
+STRIPE_TRIAL_DAYS=14
 ```
 
 ### Paiements Stripe
@@ -121,6 +122,8 @@ STRIPE_PRICING_TABLE_ID=prctbl_...
 - Ajoutez vos clés Stripe (`STRIPE_SECRET_KEY` et `STRIPE_PUBLISHABLE_KEY`) dans les variables d'environnement (Railway, Render, etc.).
 - Définissez `STRIPE_PRICE_ID` avec l'identifiant du prix de l'abonnement (utilisé pour le bouton Stripe Checkout si aucune table de prix n'est fournie).
 - Ajoutez `STRIPE_PRICING_TABLE_ID` si vous souhaitez intégrer directement la table de prix Stripe.
+- `STRIPE_TRIAL_DAYS` (optionnel) permet d'ajuster la durée de l'essai pour les nouveaux restaurants (14 jours par défaut).
+- L'accueil (`/`) agit maintenant comme page de présentation avec un appel à l'action vers `/restaurants/new` pour créer un restaurant, un administrateur propriétaire et déclencher automatiquement l'essai Stripe.
 - Créez un endpoint webhook dans le dashboard Stripe pointant vers `/stripe/webhooks` et copiez le secret (`STRIPE_WEBHOOK_SECRET`).
 - En local, vous pouvez créer un fichier `.env` (à partir de `.env.example`) pour charger ces valeurs en développement.
 - Relancez `rails db:migrate` après déploiement pour créer les tables de souscriptions.

@@ -1,0 +1,71 @@
+<div class="signup-wrapper">
+  <section class="signup-hero">
+    <h1>Créez votre compte restaurateur</h1>
+    <p>Lancez votre carte interactive en quelques minutes et profitez de 14&nbsp;jours d'essai gratuit.</p>
+  </section>
+
+  <% if flash[:alert] %>
+    <div class="signup-alert"><%= flash[:alert] %></div>
+  <% end %>
+
+  <% if @restaurant.errors.any? || @admin.errors.any? %>
+    <div class="signup-errors" role="alert">
+      <h2>Veuillez corriger les informations suivantes :</h2>
+      <ul>
+        <% @restaurant.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        <% @admin.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: @restaurant, url: restaurants_path, data: { turbo: false }, class: "signup-form" do |f| %>
+    <div class="signup-form__group">
+      <%= f.label :name, "Nom du restaurant" %>
+      <%= f.text_field :name, required: true, placeholder: "Ex. La Belle Table" %>
+    </div>
+
+    <div class="signup-form__group">
+      <%= f.label :primary_color, "Couleur principale" %>
+      <%= f.color_field :primary_color, value: (@restaurant.primary_color || '#2B5797') %>
+    </div>
+
+    <div class="signup-form__group">
+      <%= f.label :secondary_color, "Couleur secondaire" %>
+      <%= f.color_field :secondary_color, value: (@restaurant.secondary_color || '#F5DEB3') %>
+    </div>
+
+    <div class="signup-form__group">
+      <%= f.label :timezone, "Fuseau horaire" %>
+      <%= f.select :timezone, ActiveSupport::TimeZone.all.map(&:name), selected: (@restaurant.timezone || 'America/Toronto') %>
+    </div>
+
+    <div class="signup-divider"></div>
+
+    <%= fields_for :admin, @admin do |admin_fields| %>
+      <div class="signup-form__group">
+        <%= admin_fields.label :email, "Email administrateur" %>
+        <%= admin_fields.email_field :email, required: true, placeholder: "chef@restaurant.com" %>
+      </div>
+
+      <div class="signup-form__group">
+        <%= admin_fields.label :password, "Mot de passe" %>
+        <%= admin_fields.password_field :password, required: true, minlength: 6 %>
+      </div>
+
+      <div class="signup-form__group">
+        <%= admin_fields.label :password_confirmation, "Confirmer le mot de passe" %>
+        <%= admin_fields.password_field :password_confirmation, required: true, minlength: 6 %>
+      </div>
+    <% end %>
+
+    <p class="signup-terms">
+      En validant, vous serez redirigé vers Stripe pour confirmer l'essai gratuit de 14&nbsp;jours. Aucun prélèvement avant la fin de l'essai.
+    </p>
+
+    <%= f.submit "Démarrer l'essai gratuit", class: "signup-submit" %>
+  <% end %>
+</div>

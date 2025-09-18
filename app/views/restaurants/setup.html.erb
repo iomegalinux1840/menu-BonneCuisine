@@ -1,0 +1,29 @@
+<div class="setup-wrapper">
+  <section class="setup-card">
+    <h1>Bienvenue sur MenuPlatform</h1>
+
+    <% if flash[:alert] %>
+      <div class="setup-alert"><%= flash[:alert] %></div>
+    <% end %>
+
+    <p>
+      Merci d'avoir confirmé votre essai gratuit. Votre menu est prêt à être personnalisé.
+      <% if @subscription %>
+        <br>
+        Statut actuel : <strong><%= @subscription.status.humanize %></strong>
+        <% if @subscription.current_period_end.present? %>
+          &mdash; essai actif jusqu'au <%= l(@subscription.current_period_end, format: :long) %>.
+        <% end %>
+      <% end %>
+    </p>
+
+    <% if @customer_email.present? %>
+      <p>Un reçu Stripe a été envoyé à <strong><%= @customer_email %></strong>.</p>
+    <% end %>
+
+    <div class="setup-actions">
+      <%= link_to "Accéder à l'administration", restaurant_admin_menu_items_path(restaurant_slug: @restaurant.slug), class: "setup-button" %>
+      <%= link_to "Voir le menu public", restaurant_menu_path(restaurant_slug: @restaurant.slug), class: "setup-link" %>
+    </div>
+  </section>
+</div>
