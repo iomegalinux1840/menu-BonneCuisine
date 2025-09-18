@@ -1,4 +1,10 @@
-# Clear existing data
+# Guard against running destructive seeds in production environments
+if Rails.env.production?
+  puts "Seeding skipped: production environment detected"
+  return
+end
+
+# Clear existing data for development/test bootstrap only
 MenuItem.destroy_all
 Admin.destroy_all
 Restaurant.destroy_all
