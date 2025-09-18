@@ -16,6 +16,7 @@ class SubdomainConstraint
     Rails.logger.debug "SubdomainConstraint result: #{result}"
     result
   end
+
 end
 
 class AdminSubdomainConstraint
@@ -38,6 +39,8 @@ Rails.application.routes.draw do
   # This is required for direct uploads to work
   mount ActiveStorage::Engine => '/rails/active_storage'
 
+  post '/stripe/webhooks', to: 'stripe/webhooks#create'
+
   # Check for Railway environment (multi-tenant routing)
   if ENV['RAILWAY_ENVIRONMENT'].present? || ENV['RAILS_ENV'] == 'production'
     # Root shows list of restaurants
@@ -49,6 +52,9 @@ Rails.application.routes.draw do
     # Restaurant-specific public menu routes
     get 'r/:restaurant_slug', to: 'public_menus#index', as: :restaurant_menu
     get 'r/:restaurant_slug/menu', to: 'public_menus#index'
+    post 'r/:restaurant_slug/subscribe', to: 'subscriptions#create', as: :restaurant_subscriptions
+    get 'r/:restaurant_slug/subscribe/success', to: 'subscriptions#success', as: :restaurant_subscriptions_success
+    get 'r/:restaurant_slug/subscribe/cancel', to: 'subscriptions#cancel', as: :restaurant_subscriptions_cancel
 
     # Restaurant-specific admin routes
     get 'r/:restaurant_slug/admin', to: redirect('/r/%{restaurant_slug}/admin/login')
@@ -118,6 +124,9 @@ Rails.application.routes.draw do
 
       # Path-based restaurant access (e.g., menuplatform.app/r/restaurant-slug)
       get 'r/:restaurant_slug', to: 'public_menus#index', as: :restaurant_path
+      post 'r/:restaurant_slug/subscribe', to: 'subscriptions#create', as: :restaurant_subscriptions
+      get 'r/:restaurant_slug/subscribe/success', to: 'subscriptions#success', as: :restaurant_subscriptions_success
+      get 'r/:restaurant_slug/subscribe/cancel', to: 'subscriptions#cancel', as: :restaurant_subscriptions_cancel
 
       # Restaurant signup and onboarding
       resources :restaurants, only: [:new, :create] do

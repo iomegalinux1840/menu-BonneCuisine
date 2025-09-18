@@ -1,0 +1,6 @@
+<div class="subscription-result subscription-result--cancelled">
+  <h1><%= t('subscriptions.cancel.heading') %></h1>
+  <p><%= t('subscriptions.cancel.body') %></p>
+
+  <%= link_to 'Return to menu', restaurant_menu_path(restaurant_slug: params[:restaurant_slug]), class: 'subscription-result__back-link' %>
+</div>

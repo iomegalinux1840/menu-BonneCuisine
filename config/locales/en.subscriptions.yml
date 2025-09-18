@@ -1,0 +1,11 @@
+en:
+  subscriptions:
+    errors:
+      misconfigured: "Stripe is not configured. Please contact support."
+      missing_price: "Subscription price is not configured for this restaurant."
+    success:
+      heading: "Thank you for subscribing!"
+      body: "We've received your subscription. A confirmation email will arrive shortly."
+    cancel:
+      heading: "Subscription was cancelled"
+      body: "No charges were made. You can try subscribing again whenever you're ready."

@@ -223,6 +223,118 @@ body {
   }
 }
 
+.subscription-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 1.5rem 2rem;
+  margin: 1.5rem auto;
+  gap: 1.5rem;
+  max-width: 900px;
+
+  &__copy {
+    flex: 1;
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--primary-blue);
+      font-size: 1.6rem;
+      margin-bottom: 0.4rem;
+    }
+
+    p {
+      color: var(--text-muted);
+      margin: 0;
+    }
+  }
+
+  &__button {
+    background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 0.9rem 2.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: var(--shadow);
+
+    &.is-loading {
+      opacity: 0.7;
+      cursor: wait;
+    }
+
+    &:hover:not(.is-loading) {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+  }
+
+  &__error {
+    color: #c0392b;
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+
+    &__button {
+      width: 100%;
+    }
+  }
+}
+
+.subscription-pricing-table {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+
+  stripe-pricing-table {
+    width: 100%;
+  }
+}
+
+.subscription-result {
+  max-width: 600px;
+  margin: 3rem auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  text-align: center;
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  &__back-link {
+    display: inline-block;
+    margin-top: 1.5rem;
+    text-decoration: none;
+    color: var(--primary-blue);
+    font-weight: 600;
+  }
+
+  &--cancelled h1 {
+    color: #c0392b;
+  }
+}
+
 .menu-grid[data-columns="1"] {
   --menu-columns: 1;
 }

@@ -12,6 +12,9 @@
     <% if ENV['STRIPE_PUBLISHABLE_KEY'].present? %>
       <meta name="stripe-publishable-key" content="<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>">
       <script src="https://js.stripe.com/v3/"></script>
+      <% if ENV['STRIPE_PRICING_TABLE_ID'].present? %>
+        <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+      <% end %>
     <% end %>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">

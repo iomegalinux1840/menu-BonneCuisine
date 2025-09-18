@@ -2,6 +2,7 @@ class Restaurant < ApplicationRecord
   # Associations
   has_many :menu_items, dependent: :destroy
   has_many :admins, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   MENU_IMAGE_SIZES = %w[small large].freeze
   MENU_GRID_COLUMN_RANGE = (3..6).freeze
