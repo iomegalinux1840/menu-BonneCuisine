@@ -63,6 +63,7 @@ Rails.application.routes.draw do
     delete 'r/:restaurant_slug/admin/logout', to: 'admin/sessions#destroy', as: :restaurant_admin_logout
 
     scope 'r/:restaurant_slug/admin', as: :restaurant_admin do
+      resource :qr_code, controller: 'admin/qr_codes', only: [:show]
       resources :menu_items, controller: 'admin/menu_items' do
         member do
           patch :toggle_availability
@@ -103,6 +104,7 @@ Rails.application.routes.draw do
 
         # Admin routes scoped by restaurant
         namespace :admin do
+          resource :qr_code, only: [:show]
           resources :menu_items do
             member do
               patch :toggle_availability
@@ -145,6 +147,7 @@ Rails.application.routes.draw do
         post 'login', to: 'sessions#create_legacy'
         delete 'logout', to: 'sessions#destroy_legacy'
 
+        resource :qr_code, only: [:show]
         resources :menu_items do
           member do
             patch :toggle_availability

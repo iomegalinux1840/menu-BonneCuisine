@@ -1,0 +1,95 @@
+<style>
+  .qr-print-page {
+    max-width: 720px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+
+  .qr-print-page h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-blue);
+  }
+
+  .qr-print-page p {
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+  }
+
+  .qr-code-container {
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border: 2px dashed var(--border-light);
+    border-radius: 12px;
+    width: fit-content;
+    background: var(--warm-white);
+  }
+
+  .qr-code-container svg {
+    display: block;
+    height: auto;
+    width: 320px;
+  }
+
+  .print-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .menu-url {
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    word-break: break-all;
+    margin-top: 1rem;
+  }
+
+  @media print {
+    body.admin-body {
+      background: white !important;
+    }
+
+    .admin-nav,
+    .admin-tabs,
+    .print-actions,
+    .alert {
+      display: none !important;
+    }
+
+    .admin-main {
+      padding: 0 !important;
+    }
+
+    .qr-print-page {
+      box-shadow: none;
+      margin: 0;
+      border-radius: 0;
+      padding: 0;
+    }
+  }
+</style>
+
+<div class="qr-print-page">
+  <div class="print-actions">
+    <%= link_to "← Retour au menu administrateur", restaurant_admin_menu_items_path(restaurant_slug: @restaurant.slug), class: "btn btn-outline" %>
+    <button class="btn btn-primary" type="button" onclick="window.print()">Imprimer</button>
+  </div>
+
+  <h1>QR Code du menu</h1>
+  <p>Scannez ou imprimez ce code pour permettre à vos clients d'accéder rapidement au menu numérique.</p>
+
+  <div class="qr-code-container" aria-label="QR code vers le menu">
+    <%= raw @qr_svg %>
+  </div>
+
+  <div class="menu-url">
+    <strong>URL du menu&nbsp;:</strong><br>
+    <%= @menu_url %>
+  </div>
+</div>

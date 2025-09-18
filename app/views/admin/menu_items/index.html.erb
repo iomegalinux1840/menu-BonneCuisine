@@ -1,7 +1,12 @@
 <div class="admin-content">
   <div class="admin-header">
     <h2>Gestion du Menu</h2>
-    <%= link_to "Ajouter un plat", new_restaurant_admin_menu_item_path(restaurant_slug: params[:restaurant_slug]), class: "btn btn-primary" %>
+    <div class="admin-header-actions">
+      <% qr_code_path = url_for(controller: '/admin/qr_codes', action: :show, restaurant_slug: params[:restaurant_slug], only_path: true) %>
+      <%= link_to "QR code à imprimer", qr_code_path,
+                  class: "btn btn-outline", target: "_blank", rel: "noopener" %>
+      <%= link_to "Ajouter un plat", new_restaurant_admin_menu_item_path(restaurant_slug: params[:restaurant_slug]), class: "btn btn-primary" %>
+    </div>
   </div>
 
   <div class="table-container">
