@@ -4,3 +4,4 @@
 //= link menu_updates.js
 //= link controllers/application.js
 //= link controllers/index.js
+//= link controllers/subscription_controller.js
