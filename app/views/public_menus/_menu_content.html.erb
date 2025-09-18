@@ -29,17 +29,23 @@
   </section>
 <% end %>
 
-<div class="menu-grid image-<%= menu_layout[:image_size] %>"
-     id="menu-grid"
-     data-columns="<%= menu_layout[:grid_columns] %>">
-  <%= render partial: "menu_items/menu_item",
-             collection: menu_items,
-             as: :menu_item,
-             locals: { layout_settings: menu_layout } %>
-</div>
+<section class="menu-section" aria-labelledby="menu-title">
+  <h2 id="menu-title" class="menu-title">
+    <%= current_restaurant.name.presence || 'Notre carte' %>
+  </h2>
 
-<% if menu_items.empty? %>
-  <div class="empty-menu">
-    <p>Aucun plat disponible pour le moment.</p>
+  <div class="menu-grid image-<%= menu_layout[:image_size] %>"
+       id="menu-grid"
+       data-columns="<%= menu_layout[:grid_columns] %>">
+    <%= render partial: "menu_items/menu_item",
+               collection: menu_items,
+               as: :menu_item,
+               locals: { layout_settings: menu_layout } %>
   </div>
-<% end %>
+
+  <% if menu_items.empty? %>
+    <div class="empty-menu">
+      <p>Aucun plat disponible pour le moment.</p>
+    </div>
+  <% end %>
+</section>

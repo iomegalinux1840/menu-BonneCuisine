@@ -33,52 +33,78 @@
         --font-family-heading: '<%= @restaurant_branding[:font_family] %>', serif;
       }
 
-      body {
-        background-color: var(--secondary-color);
+      body.public-menu {
+        background: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.15), transparent 45%),
+                    linear-gradient(135deg, rgba(43, 87, 151, 0.95) 0%, rgba(74, 123, 200, 0.85) 48%, rgba(138, 182, 255, 0.78) 100%);
+        min-height: 100vh;
       }
 
       h1, h2, h3 {
         font-family: var(--font-family-heading);
-        color: var(--primary-color);
       }
 
-      .menu-header {
-        background-color: var(--primary-color);
-        color: white;
-        padding: 2rem;
-        text-align: center;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      .public-menu .restaurant-nav {
+        background: linear-gradient(120deg, rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.35));
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(248, 250, 252, 0.18);
       }
 
-      .menu-header h1 {
-        color: white;
-        margin: 0;
-        font-size: 3rem;
-      }
-
-      .restaurant-logo {
-        max-height: 80px;
-        margin-bottom: 1rem;
-      }
-
-      .menu-item {
-        background-color: white;
-        border: 2px solid var(--primary-color);
-      }
-
-      .menu-item-name {
-        color: var(--primary-color);
+      .public-menu .restaurant-nav h1 {
         font-family: var(--font-family-heading);
       }
 
-      .menu-item-price {
-        color: var(--primary-color);
-        font-weight: bold;
+      .public-menu .restaurant-container {
+        position: relative;
+      }
+
+      .public-menu .restaurant-container::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(255,255,255,0.06);
+        border-radius: 36px;
+        filter: blur(0);
+        pointer-events: none;
+      }
+
+      .public-menu .restaurant-header {
+        border-radius: 28px;
+        border: 1px solid rgba(248, 250, 252, 0.14);
+        background: linear-gradient(140deg, rgba(255,255,255,0.18), rgba(255,255,255,0.07));
+        backdrop-filter: blur(18px);
+      }
+
+      .public-menu .menu-item {
+        background: linear-gradient(160deg, rgba(248, 250, 252, 0.85), rgba(255, 255, 255, 0.7));
+        border: 1px solid rgba(248, 250, 252, 0.25);
+        box-shadow: 0 18px 35px rgba(15, 23, 42, 0.18);
+      }
+
+      .public-menu .menu-item.has-image .menu-item-photo {
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+      }
+
+      .public-menu .menu-item-name,
+      .public-menu .menu-item-price {
+        color: #0f172a;
+      }
+
+      .public-menu .menu-item-price {
+        background: rgba(15, 23, 42, 0.08);
+        border-radius: 999px;
+        padding: 0.25rem 0.9rem;
+      }
+
+      .public-menu .menu-message {
+        background: linear-gradient(140deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+        border: 1px solid rgba(248, 250, 252, 0.18);
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
       }
     </style>
   </head>
 
-  <body data-restaurant-id="<%= current_restaurant&.id %>"
+  <body class="public-menu"
+        data-restaurant-id="<%= current_restaurant&.id %>"
         data-menu-refresh-url="<%= "#{request.path}.json" %>">
     <!-- Blue Header Bar -->
     <nav class="restaurant-nav">

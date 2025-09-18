@@ -1,5 +1,6 @@
 <% layout_settings ||= { image_size: 'small', grid_columns: 3 } %>
 <div class="menu-item <%= 'has-image' if menu_item.image.attached? %>" data-menu-item-id="<%= menu_item.id %>">
+  <div class="menu-item-accent"></div>
   <!-- Debug info: <%= menu_item.name %> - Image attached: <%= menu_item.image.attached? %> -->
   <% if menu_item.image.attached? %>
     <div class="menu-item-image">
