@@ -18,6 +18,8 @@ class PublicMenusController < ApplicationController
                                     .limit(12)
 
     @menu_layout = current_restaurant.layout_settings
+    @menu_signature = menu_signature
+    @menu_refresh_interval = menu_refresh_interval
 
     Rails.logger.debug "Found #{@menu_items.count} menu items for restaurant"
 
@@ -43,13 +45,37 @@ class PublicMenusController < ApplicationController
             partial: 'public_menus/menu_content',
             formats: [:html],
             locals: { menu_items: @menu_items, menu_layout: @menu_layout }
-          )
+          ),
+          signature: menu_signature,
+          refresh_interval: @menu_refresh_interval
         }
       end
     end
   end
 
   private
+
+  def menu_signature
+    items = current_restaurant.menu_items
+    latest = [
+      current_restaurant.updated_at,
+      items.maximum(:updated_at),
+      items.maximum(:created_at)
+    ].compact.map { |time| time.utc.to_f }.max
+
+    parts = []
+    parts << latest if latest
+    parts << items.count
+    parts << (items.maximum(:position) || 0)
+
+    parts.present? ? parts.join(':') : '0'
+  end
+
+  def menu_refresh_interval
+    interval = ENV.fetch('PUBLIC_MENU_REFRESH_INTERVAL_SECONDS', 60).to_i
+    interval = 60 if interval <= 0
+    interval.clamp(15, 600)
+  end
 
   def apply_restaurant_branding
     @restaurant_branding = {
