@@ -1,28 +1,33 @@
 <% layout_settings ||= { image_size: 'small', grid_columns: 3 } %>
-<div class="menu-item menu-item--list"
+<div class="menu-item menu-item--showcase"
      data-menu-item-id="<%= menu_item.id %>">
-  <% if menu_item.image.attached? %>
-    <div class="menu-item-thumb">
+  <div class="menu-item-media">
+    <% if menu_item.image.attached? %>
       <%= image_tag menu_item.image,
                     alt: menu_item.name,
-                    class: "menu-item-thumb-image" %>
-    </div>
-  <% end %>
+                    class: "menu-item-media__image" %>
+    <% else %>
+      <div class="menu-item-media__placeholder" aria-hidden="true">🍽️</div>
+    <% end %>
 
-  <div class="menu-item-content">
-    <div class="menu-item-header">
-      <h3 class="menu-item-name"><%= menu_item.name %></h3>
-      <span class="menu-item-price">
-        <%= number_to_currency(menu_item.price, unit: "$", precision: 2, locale: :en) %>
-      </span>
-    </div>
+    <span class="menu-item-price">
+      <%= number_to_currency(menu_item.price, unit: "$", precision: 2, locale: :en) %>
+    </span>
+  </div>
+
+  <div class="menu-item-copy">
+    <h3 class="menu-item-name"><%= menu_item.name %></h3>
 
     <% if menu_item.description.present? %>
-      <div class="menu-item-description"><%= simple_format(menu_item.description) %></div>
+      <div class="menu-item-description">
+        <%= simple_format(menu_item.description) %>
+      </div>
     <% end %>
 
     <% if menu_item.comment.present? %>
-      <div class="menu-item-comment"><%= simple_format(menu_item.comment) %></div>
+      <div class="menu-item-comment">
+        <%= simple_format(menu_item.comment) %>
+      </div>
     <% end %>
   </div>
 </div>
