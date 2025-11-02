@@ -13,22 +13,6 @@
       publishable-key="<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>">
     </stripe-pricing-table>
   </section>
-<% elsif ENV['STRIPE_PUBLISHABLE_KEY'].present? && (current_restaurant.stripe_price_id.present? || ENV['STRIPE_PRICE_ID'].present?) %>
-  <section class="subscription-cta"
-           data-controller="subscription"
-           data-subscription-url-value="<%= restaurant_subscriptions_path(restaurant_slug: current_restaurant.slug) %>">
-    <div class="subscription-cta__copy">
-      <h2>Restez informé</h2>
-      <p>Abonnez-vous pour recevoir les nouveautés du menu.</p>
-    </div>
-    <button type="button"
-            class="subscription-cta__button"
-            data-action="click->subscription#subscribe"
-            data-subscription-target="button">
-      S'abonner
-    </button>
-    <p class="subscription-cta__error" data-subscription-target="error" hidden></p>
-  </section>
 <% end %>
 
 <section class="menu-section" aria-labelledby="menu-title">
