@@ -83,9 +83,10 @@ body.public-menu {
   }
 
   .restaurant-container {
-    max-width: 1500px;
-    margin: 2rem auto 3rem;
-    padding: 0 2.5rem;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
     position: relative;
     background: transparent;
     border: none;
@@ -794,13 +795,13 @@ body.public-menu {
 
 @media (max-width: 1200px) {
   .public-menu .restaurant-container {
-    padding: 0 1.5rem;
+    padding: 0;
   }
 }
 
 @media (max-width: 768px) {
   .public-menu .restaurant-container {
-    padding: 0 1rem;
+    padding: 0;
   }
 }
 

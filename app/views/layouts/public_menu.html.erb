@@ -96,31 +96,8 @@
         data-menu-refresh-url="<%= "#{request.path}.json" %>"
         data-menu-signature="<%= @menu_signature %>"
         data-menu-refresh-interval="<%= @menu_refresh_interval %>">
-    <!-- Blue Header Bar -->
-    <nav class="restaurant-nav">
-      <div class="nav-content">
-        <h1><%= @restaurant_branding[:name] %></h1>
-        <div class="nav-actions">
-          <a href="<%= restaurant_admin_login_path(restaurant_slug: params[:restaurant_slug]) %>" class="admin-link">
-            🔧 Administration
-          </a>
-        </div>
-      </div>
-    </nav>
-
     <!-- Main Content -->
     <div class="restaurant-container">
-      <!-- Restaurant Branding Header -->
-      <% if @restaurant_branding[:logo_url].present? %>
-        <div class="restaurant-header">
-          <div class="logo-container">
-            <div class="logo-wrapper">
-              <%= image_tag @restaurant_branding[:logo_url], class: "restaurant-logo", alt: @restaurant_branding[:name] %>
-            </div>
-          </div>
-        </div>
-      <% end %>
-
       <!-- Menu Content -->
       <main>
         <%= yield %>
