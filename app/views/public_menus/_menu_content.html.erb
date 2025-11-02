@@ -1,70 +1,14 @@
 <% pricing_table_enabled = ENV['STRIPE_PRICING_TABLE_ENABLED'].to_s.casecmp('true').zero? %>
+<% display_style = menu_layout[:display_style].presence || 'classic' %>
 
-<div class="menu-screen" aria-labelledby="menu-title">
-  <aside class="menu-screen__branding">
-    <div class="menu-brand-card">
-      <% if defined?(@restaurant_branding) && @restaurant_branding[:logo_url].present? %>
-        <div class="menu-brand-card__logo">
-          <%= image_tag @restaurant_branding[:logo_url],
-                        alt: current_restaurant.name,
-                        class: "menu-brand-card__logo-image" %>
-        </div>
-      <% else %>
-        <div class="menu-brand-card__logo menu-brand-card__logo--placeholder">
-          <span><%= (current_restaurant.name.presence || 'Menu')[0,2].upcase %></span>
-        </div>
-      <% end %>
+<% layout_locals = {
+     menu_items: menu_items,
+     menu_layout: menu_layout,
+     pricing_table_enabled: pricing_table_enabled
+   } %>
 
-      <div class="menu-brand-card__heading">
-        <p class="menu-brand-card__eyebrow">Restaurant</p>
-        <h1 class="menu-brand-card__title"><%= current_restaurant.name.presence || 'La Bonne Cuisine' %></h1>
-        <p class="menu-brand-card__subtitle">Menu</p>
-      </div>
-
-      <% if menu_layout[:message_of_the_day].present? %>
-        <div class="menu-brand-card__message">
-          <%= simple_format(menu_layout[:message_of_the_day]) %>
-        </div>
-      <% else %>
-        <p class="menu-brand-card__message menu-brand-card__message--placeholder">
-          Savourez nos spécialités maison, fraîchement préparées.
-        </p>
-      <% end %>
-    </div>
-  </aside>
-
-  <section class="menu-section menu-screen__content" aria-labelledby="menu-title">
-    <header class="menu-screen__header">
-      <h2 id="menu-title" class="menu-title">
-        <%= current_restaurant.name.presence || 'Notre carte' %>
-      </h2>
-      <p class="menu-screen__subtext">
-        Découvrez notre sélection du jour — visualisée pour les écrans grand format.
-      </p>
-    </header>
-
-    <div class="menu-grid image-<%= menu_layout[:image_size] %>"
-         id="menu-grid"
-         data-columns="<%= menu_layout[:grid_columns] %>">
-      <%= render partial: "menu_items/menu_item",
-                 collection: menu_items,
-                 as: :menu_item,
-                 locals: { layout_settings: menu_layout } %>
-    </div>
-
-    <% if menu_items.empty? %>
-      <div class="empty-menu">
-        <p>Aucun plat disponible pour le moment.</p>
-      </div>
-    <% end %>
-
-    <% if pricing_table_enabled && ENV['STRIPE_PRICING_TABLE_ID'].present? && ENV['STRIPE_PUBLISHABLE_KEY'].present? %>
-      <section class="subscription-pricing-table">
-        <stripe-pricing-table
-          pricing-table-id="<%= ENV['STRIPE_PRICING_TABLE_ID'] %>"
-          publishable-key="<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>">
-        </stripe-pricing-table>
-      </section>
-    <% end %>
-  </section>
-</div>
+<% if display_style == 'showcase' %>
+  <%= render partial: "public_menus/showcase_layout", locals: layout_locals %>
+<% else %>
+  <%= render partial: "public_menus/classic_layout", locals: layout_locals %>
+<% end %>

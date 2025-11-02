@@ -14,6 +14,14 @@ RSpec.describe "Menu Display", type: :system do
   end
 
   describe "public menu page" do
+    def menu_item_selector(page)
+      page.has_css?('.showcase-menu-item') ? '.showcase-menu-item' : '.menu-item'
+    end
+
+    def menu_grid_selector(page)
+      page.has_css?('.showcase-layout__grid') ? '.showcase-layout__grid' : '.menu-grid'
+    end
+
     it "displays the restaurant name" do
       visit root_path
       expect(page).to have_content("La Bonne Cuisine")
@@ -39,22 +47,25 @@ RSpec.describe "Menu Display", type: :system do
 
     it "displays items in correct order" do
       visit root_path
-      menu_items = page.all('.menu-item h3').map(&:text)
+      selector = menu_item_selector(page)
+      menu_items = page.all(selector).map do |card|
+        card.find('h3, .showcase-menu-item__name').text
+      end
       expect(menu_items).to eq(["Soupe à l'oignon", "Coq au vin"])
     end
 
     it "has responsive grid layout" do
       visit root_path
-      expect(page).to have_css('.menu-grid')
-      expect(page).to have_css('.menu-item', count: 2)
+      expect(page).to have_css(menu_grid_selector(page))
+      expect(page).to have_css(menu_item_selector(page), count: 2)
     end
 
     it "displays items with proper styling" do
       visit root_path
-      within first('.menu-item') do
-        expect(page).to have_css('h3')
-        expect(page).to have_css('.description')
-        expect(page).to have_css('.price')
+      within first(menu_item_selector(page)) do
+        expect(page).to have_css('h3, .showcase-menu-item__name')
+        expect(page).to have_text("Soupe traditionnelle")
+        expect(page).to have_css('.menu-item-price, .showcase-menu-item__price')
       end
     end
   end

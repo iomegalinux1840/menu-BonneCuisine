@@ -91,7 +91,8 @@
     </style>
   </head>
 
-  <body class="public-menu"
+  <% menu_style = current_restaurant&.menu_display_style.presence || 'classic' %>
+  <body class="public-menu public-menu--<%= menu_style %>"
         data-restaurant-id="<%= current_restaurant&.id %>"
         data-menu-refresh-url="<%= "#{request.path}.json" %>"
         data-menu-signature="<%= @menu_signature %>"

@@ -1,0 +1,35 @@
+<% if menu_layout[:message_of_the_day].present? %>
+  <section class="menu-message" role="complementary">
+    <div class="menu-message-body"><%= simple_format(menu_layout[:message_of_the_day]) %></div>
+  </section>
+<% end %>
+
+<section class="menu-section menu-section--classic" aria-labelledby="menu-title">
+  <h2 id="menu-title" class="menu-title">
+    <%= current_restaurant.name.presence || 'Notre carte' %>
+  </h2>
+
+  <div class="menu-grid menu-grid--classic image-<%= menu_layout[:image_size] %>"
+       id="menu-grid"
+       data-columns="<%= menu_layout[:grid_columns] %>">
+    <%= render partial: "menu_items/menu_item",
+               collection: menu_items,
+               as: :menu_item,
+               locals: { layout_settings: menu_layout } %>
+  </div>
+
+  <% if menu_items.empty? %>
+    <div class="empty-menu">
+      <p>Aucun plat disponible pour le moment.</p>
+    </div>
+  <% end %>
+</section>
+
+<% if pricing_table_enabled && ENV['STRIPE_PRICING_TABLE_ID'].present? && ENV['STRIPE_PUBLISHABLE_KEY'].present? %>
+  <section class="subscription-pricing-table">
+    <stripe-pricing-table
+      pricing-table-id="<%= ENV['STRIPE_PRICING_TABLE_ID'] %>"
+      publishable-key="<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>">
+    </stripe-pricing-table>
+  </section>
+<% end %>

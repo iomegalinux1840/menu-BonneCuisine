@@ -105,6 +105,16 @@ body.public-menu {
   }
 }
 
+.public-menu--classic .restaurant-container {
+  max-width: 1380px;
+  margin: 2.5rem auto 3.5rem;
+  padding: 0 2.5rem;
+}
+
+.public-menu--classic .restaurant-container > main {
+  padding: 0;
+}
+
 .logo-container {
   display: flex;
   justify-content: center;
@@ -151,7 +161,7 @@ body.public-menu {
   }
 }
 
-.public-menu .menu-screen {
+.public-menu--showcase .showcase-layout {
   display: grid;
   grid-template-columns: minmax(280px, 320px) 1fr;
   background: linear-gradient(90deg, rgba(102, 122, 59, 0.95) 0%, rgba(24, 28, 36, 0.98) 45%, rgba(12, 15, 22, 0.98) 100%);
@@ -162,7 +172,7 @@ body.public-menu {
   position: relative;
 }
 
-.public-menu .menu-screen::after {
+.public-menu--showcase .showcase-layout::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -174,7 +184,7 @@ body.public-menu {
   opacity: 0.25;
 }
 
-.public-menu .menu-screen__branding {
+.public-menu--showcase .showcase-layout__branding {
   position: relative;
   z-index: 1;
   background: linear-gradient(180deg, #8ba046 0%, #627433 100%);
@@ -186,7 +196,7 @@ body.public-menu {
   justify-content: space-between;
 }
 
-.public-menu .menu-brand-card {
+.public-menu--showcase .showcase-brand-card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -194,7 +204,7 @@ body.public-menu {
   gap: 1.75rem;
 }
 
-.public-menu .menu-brand-card__logo {
+.public-menu--showcase .showcase-brand-card__logo {
   width: 180px;
   height: 180px;
   border-radius: 50%;
@@ -206,25 +216,25 @@ body.public-menu {
   border: 4px solid rgba(255, 255, 255, 0.25);
 }
 
-.public-menu .menu-brand-card__logo-image {
+.public-menu--showcase .showcase-brand-card__logo-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.public-menu .menu-brand-card__logo--placeholder span {
+.public-menu--showcase .showcase-brand-card__logo--placeholder span {
   font-family: 'Playfair Display', serif;
   font-size: 3rem;
   letter-spacing: 0.1em;
 }
 
-.public-menu .menu-brand-card__heading {
+.public-menu--showcase .showcase-brand-card__heading {
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
 }
 
-.public-menu .menu-brand-card__eyebrow {
+.public-menu--showcase .showcase-brand-card__eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.35em;
   font-size: 0.75rem;
@@ -232,7 +242,7 @@ body.public-menu {
   margin: 0;
 }
 
-.public-menu .menu-brand-card__title {
+.public-menu--showcase .showcase-brand-card__title {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 3.1vw, 2.8rem);
   margin: 0;
@@ -240,7 +250,7 @@ body.public-menu {
   letter-spacing: 0.12em;
 }
 
-.public-menu .menu-brand-card__subtitle {
+.public-menu--showcase .showcase-brand-card__subtitle {
   font-size: 1.15rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -248,22 +258,22 @@ body.public-menu {
   margin: 0;
 }
 
-.public-menu .menu-brand-card__message {
+.public-menu--showcase .showcase-brand-card__message {
   font-size: 0.95rem;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.88);
   max-width: 240px;
 }
 
-.public-menu .menu-brand-card__message p {
+.public-menu--showcase .showcase-brand-card__message p {
   margin: 0;
 }
 
-.public-menu .menu-brand-card__message--placeholder {
+.public-menu--showcase .showcase-brand-card__message--placeholder {
   font-style: italic;
 }
 
-.public-menu .menu-section {
+.public-menu--showcase .showcase-layout__content {
   position: relative;
   z-index: 1;
   background: rgba(12, 15, 22, 0.75);
@@ -275,14 +285,14 @@ body.public-menu {
   gap: 2.5rem;
 }
 
-.public-menu .menu-screen__header {
+.public-menu--showcase .showcase-layout__header {
   text-align: center;
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
 }
 
-.public-menu .menu-title {
+.public-menu--showcase .showcase-layout__title {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 3.6vw, 3rem);
   letter-spacing: 0.18em;
@@ -291,14 +301,14 @@ body.public-menu {
   margin: 0;
 }
 
-.public-menu .menu-screen__subtext {
+.public-menu--showcase .showcase-layout__subtext {
   color: rgba(248, 250, 252, 0.7);
   font-size: 1rem;
   margin: 0 auto;
   max-width: 520px;
 }
 
-.public-menu .menu-grid {
+.public-menu--showcase .showcase-layout__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 2.5rem 2.2rem;
@@ -307,51 +317,151 @@ body.public-menu {
   padding: 0;
 }
 
-.public-menu .menu-grid.updating {
+.public-menu--showcase .showcase-layout__grid.updating {
   opacity: 0.55;
   transition: opacity 0.35s ease;
 }
 
+.public-menu--classic .menu-section--classic {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  margin: 0 auto 3rem;
+  position: relative;
+  border: none;
+  color: #0f172a;
+  width: 100%;
+}
+
+.public-menu--classic .menu-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3.8vw, 2.4rem);
+  text-align: center;
+  color: #f8fafc;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 64px;
+    height: 3px;
+    background: linear-gradient(135deg, var(--primary-color, #facc15), var(--secondary-color, #f97316));
+    margin: 0.75rem auto 0 auto;
+    border-radius: 999px;
+  }
+}
+
+.public-menu--classic .menu-grid--classic {
+  column-count: 2;
+  column-gap: 2.5rem;
+  max-width: 100%;
+  margin: 1.5rem auto 0;
+  padding: 0;
+  width: 100%;
+
+  &.updating {
+    opacity: 0.55;
+    transition: opacity 0.35s ease;
+  }
+}
+
+.public-menu--classic .menu-message {
+  width: 100%;
+  margin: 0 auto 1.5rem;
+  padding: 0.5rem 0;
+  background: transparent;
+  border: none;
+  text-align: center;
+  color: rgba(248, 250, 252, 0.85);
+  font-weight: 600;
+}
+
+.public-menu--classic .menu-message-body p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: inherit;
+}
+
 @media (max-width: 1200px) {
-  .public-menu .menu-screen {
+  .public-menu--showcase .showcase-layout {
     grid-template-columns: minmax(240px, 280px) 1fr;
   }
 
-  .public-menu .menu-section {
+  .public-menu--showcase .showcase-layout__content {
     padding: 3rem 2.5rem;
   }
 }
 
 @media (max-width: 960px) {
-  .public-menu .menu-screen {
+  .public-menu--showcase .showcase-layout {
     grid-template-columns: 1fr;
   }
 
-  .public-menu .menu-screen__branding {
+  .public-menu--showcase .showcase-layout__branding {
     padding: 2.5rem 2rem 2rem;
     align-items: center;
   }
 
-  .public-menu .menu-section {
+  .public-menu--showcase .showcase-layout__content {
     padding: 2.5rem 2rem 3rem;
   }
 
-  .public-menu .menu-grid {
+  .public-menu--showcase .showcase-layout__grid {
     gap: 2rem;
   }
 }
 
+@media (min-width: 1600px) {
+  .public-menu--classic .menu-grid--classic {
+    column-count: 3;
+  }
+}
+
+@media (max-width: 1100px) {
+  .public-menu--classic .menu-grid--classic {
+    column-count: 2;
+    column-gap: 2rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .public-menu--classic .menu-grid--classic {
+    column-count: 1;
+    column-gap: 0;
+  }
+
+  .public-menu--classic .menu-item--list {
+    padding-right: 0;
+  }
+}
+
 @media (max-width: 640px) {
-  .public-menu .menu-grid {
+  .public-menu--classic .menu-grid--classic {
+    padding: 0;
+  }
+
+  .public-menu--classic .menu-title {
+    letter-spacing: 0.12em;
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .public-menu--showcase .showcase-layout__grid {
     grid-template-columns: 1fr;
   }
 
-  .public-menu .menu-brand-card__logo {
+  .public-menu--showcase .showcase-brand-card__logo {
     width: 140px;
     height: 140px;
   }
 
-  .public-menu .menu-title {
+  .public-menu--showcase .showcase-layout__title {
     letter-spacing: 0.12em;
     font-size: 2.2rem;
   }
@@ -672,7 +782,7 @@ body.public-menu {
   }
 }
 
-.public-menu .menu-item {
+.public-menu--showcase .showcase-menu-item {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -682,11 +792,11 @@ body.public-menu {
   color: #f8fafc;
 }
 
-.public-menu .menu-item--showcase {
+.public-menu--showcase .showcase-menu-item {
   padding: 1rem 0;
 }
 
-.public-menu .menu-item-media {
+.public-menu--showcase .showcase-menu-item__media {
   position: relative;
   width: 165px;
   height: 165px;
@@ -699,22 +809,22 @@ body.public-menu {
   place-items: center;
 }
 
-.public-menu .menu-item-media__image {
+.public-menu--showcase .showcase-menu-item__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
 }
 
-.public-menu .menu-item-media:hover .menu-item-media__image {
+.public-menu--showcase .showcase-menu-item__media:hover .showcase-menu-item__image {
   transform: scale(1.05);
 }
 
-.public-menu .menu-item-media__placeholder {
+.public-menu--showcase .showcase-menu-item__placeholder {
   font-size: 2.5rem;
 }
 
-.public-menu .menu-item-price {
+.public-menu--showcase .showcase-menu-item__price {
   position: absolute;
   inset: auto 10px 10px auto;
   background: linear-gradient(135deg, #94d44b, #5aae2a);
@@ -727,13 +837,13 @@ body.public-menu {
   border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-.public-menu .menu-item-copy {
+.public-menu--showcase .showcase-menu-item__copy {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
 }
 
-.public-menu .menu-item-name {
+.public-menu--showcase .showcase-menu-item__name {
   font-family: 'Playfair Display', serif;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -743,29 +853,123 @@ body.public-menu {
   text-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 }
 
-.public-menu .menu-item-description,
-.public-menu .menu-item-comment {
+.public-menu--showcase .showcase-menu-item__description,
+.public-menu--showcase .showcase-menu-item__comment {
   font-size: 0.92rem;
   line-height: 1.55;
   color: rgba(248, 250, 252, 0.78);
   margin: 0;
 }
 
-.public-menu .menu-item-comment {
+.public-menu--showcase .showcase-menu-item__comment {
   font-style: italic;
   color: rgba(248, 250, 252, 0.68);
 }
 
-.public-menu .menu-item-description p,
-.public-menu .menu-item-comment p {
+.public-menu--showcase .showcase-menu-item__description p,
+.public-menu--showcase .showcase-menu-item__comment p {
   margin: 0;
 }
 
-.public-menu .menu-message {
+.public-menu--showcase .menu-message {
   display: none;
 }
 
-.public-menu .empty-menu {
+.public-menu--classic .menu-item {
+  break-inside: avoid;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding: 0.45rem 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  min-height: 0;
+  width: 100%;
+}
+
+.public-menu--classic .menu-item--list {
+  border-bottom: 1px solid rgba(248, 250, 252, 0.18);
+  padding-right: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.public-menu--classic .menu-item--list:last-of-type {
+  border-bottom: none;
+}
+
+.public-menu--classic .menu-item-thumb {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.public-menu--classic .menu-item-thumb-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.public-menu--classic .menu-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.public-menu--classic .menu-item-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.public-menu--classic .menu-item-name {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 1.08rem;
+  color: #f8fafc;
+  font-weight: 700;
+  flex: 1;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.public-menu--classic .menu-item-price {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #facc15;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.public-menu--classic .menu-item-description,
+.public-menu--classic .menu-item-comment {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: rgba(248, 250, 252, 0.8);
+  margin: 0;
+}
+
+.public-menu--classic .menu-item-description p,
+.public-menu--classic .menu-item-comment p {
+  margin: 0;
+}
+
+.public-menu--classic .menu-item-comment {
+  font-style: italic;
+  color: rgba(248, 250, 252, 0.68);
+}
+
+.public-menu--showcase .empty-menu {
   text-align: center;
   padding: 2.5rem;
   color: #f8fafc;
@@ -774,6 +978,17 @@ body.public-menu {
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.public-menu--classic .empty-menu {
+  text-align: center;
+  padding: 3rem;
+  color: #1e293b;
+  font-size: 1.1rem;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.15);
 }
 
 .public-menu .restaurant-footer {
@@ -794,14 +1009,19 @@ body.public-menu {
 }
 
 @media (max-width: 1200px) {
-  .public-menu .restaurant-container {
+  .public-menu--showcase .restaurant-container {
     padding: 0;
   }
 }
 
 @media (max-width: 768px) {
-  .public-menu .restaurant-container {
+  .public-menu--showcase .restaurant-container {
     padding: 0;
+  }
+
+  .public-menu--classic .restaurant-container {
+    padding: 0 1.25rem;
+    margin: 2rem auto;
   }
 }
 
@@ -951,6 +1171,37 @@ body.public-menu {
 
 .form-group {
   margin-bottom: 1.5rem;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.radio-group.stacked .radio-option {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.6rem 0;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.radio-group.stacked .radio-option:hover {
+  border-color: var(--border-light);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.radio-group.stacked .radio-option input[type="radio"] {
+  margin-top: 0.35rem;
+}
+
+.radio-group.stacked .radio-option p {
+  margin: 0.25rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 .form-label {

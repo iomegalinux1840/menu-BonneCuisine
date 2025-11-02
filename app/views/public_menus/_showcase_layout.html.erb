@@ -1,0 +1,68 @@
+<div class="showcase-layout" aria-labelledby="menu-title">
+  <aside class="showcase-layout__branding">
+    <div class="showcase-brand-card">
+      <% if defined?(@restaurant_branding) && @restaurant_branding[:logo_url].present? %>
+        <div class="showcase-brand-card__logo">
+          <%= image_tag @restaurant_branding[:logo_url],
+                        alt: current_restaurant.name,
+                        class: "showcase-brand-card__logo-image" %>
+        </div>
+      <% else %>
+        <div class="showcase-brand-card__logo showcase-brand-card__logo--placeholder">
+          <span><%= (current_restaurant.name.presence || 'Menu')[0, 2].upcase %></span>
+        </div>
+      <% end %>
+
+      <div class="showcase-brand-card__heading">
+        <p class="showcase-brand-card__eyebrow">Restaurant</p>
+        <h1 class="showcase-brand-card__title"><%= current_restaurant.name.presence || 'La Bonne Cuisine' %></h1>
+        <p class="showcase-brand-card__subtitle">Menu</p>
+      </div>
+
+      <% if menu_layout[:message_of_the_day].present? %>
+        <div class="showcase-brand-card__message">
+          <%= simple_format(menu_layout[:message_of_the_day]) %>
+        </div>
+      <% else %>
+        <p class="showcase-brand-card__message showcase-brand-card__message--placeholder">
+          Savourez nos spécialités maison, fraîchement préparées.
+        </p>
+      <% end %>
+    </div>
+  </aside>
+
+  <section class="showcase-layout__content" aria-labelledby="menu-title">
+    <header class="showcase-layout__header">
+      <h2 id="menu-title" class="showcase-layout__title">
+        <%= current_restaurant.name.presence || 'Notre carte' %>
+      </h2>
+      <p class="showcase-layout__subtext">
+        Découvrez notre sélection du jour — visualisée pour les écrans grand format.
+      </p>
+    </header>
+
+    <div class="showcase-layout__grid image-<%= menu_layout[:image_size] %>"
+         id="menu-grid"
+         data-columns="<%= menu_layout[:grid_columns] %>">
+      <%= render partial: "menu_items/menu_item",
+                 collection: menu_items,
+                 as: :menu_item,
+                 locals: { layout_settings: menu_layout } %>
+    </div>
+
+    <% if menu_items.empty? %>
+      <div class="empty-menu showcase-layout__empty">
+        <p>Aucun plat disponible pour le moment.</p>
+      </div>
+    <% end %>
+
+    <% if pricing_table_enabled && ENV['STRIPE_PRICING_TABLE_ID'].present? && ENV['STRIPE_PUBLISHABLE_KEY'].present? %>
+      <section class="subscription-pricing-table">
+        <stripe-pricing-table
+          pricing-table-id="<%= ENV['STRIPE_PRICING_TABLE_ID'] %>"
+          publishable-key="<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>">
+        </stripe-pricing-table>
+      </section>
+    <% end %>
+  </section>
+</div>

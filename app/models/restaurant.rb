@@ -6,6 +6,7 @@ class Restaurant < ApplicationRecord
 
   MENU_IMAGE_SIZES = %w[small large].freeze
   MENU_GRID_COLUMN_RANGE = (3..6).freeze
+  MENU_DISPLAY_STYLES = %w[classic showcase].freeze
 
   # Validations
   validates :name, presence: true, length: { maximum: 100 }
@@ -21,6 +22,7 @@ class Restaurant < ApplicationRecord
             allow_blank: true
   validates :menu_image_size, inclusion: { in: MENU_IMAGE_SIZES }
   validates :menu_grid_columns, inclusion: { in: MENU_GRID_COLUMN_RANGE }
+  validates :menu_display_style, inclusion: { in: MENU_DISPLAY_STYLES }
 
   # Reserved subdomains that cannot be used
   RESERVED_SUBDOMAINS = %w[
@@ -74,7 +76,8 @@ class Restaurant < ApplicationRecord
     {
       image_size: menu_image_size.presence || 'small',
       grid_columns: menu_grid_columns.presence || 3,
-      message_of_the_day: message_of_the_day
+      message_of_the_day: message_of_the_day,
+      display_style: menu_display_style.presence || 'classic'
     }
   end
 
@@ -120,5 +123,6 @@ class Restaurant < ApplicationRecord
     self.timezone ||= 'America/Toronto'
     self.menu_image_size ||= 'small'
     self.menu_grid_columns ||= 3
+    self.menu_display_style ||= 'showcase'
   end
 end

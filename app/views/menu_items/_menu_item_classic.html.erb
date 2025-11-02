@@ -1,0 +1,27 @@
+<div class="menu-item menu-item--list"
+     data-menu-item-id="<%= menu_item.id %>">
+  <% if menu_item.image.attached? %>
+    <div class="menu-item-thumb">
+      <%= image_tag menu_item.image,
+                    alt: menu_item.name,
+                    class: "menu-item-thumb-image" %>
+    </div>
+  <% end %>
+
+  <div class="menu-item-content">
+    <div class="menu-item-header">
+      <h3 class="menu-item-name"><%= menu_item.name %></h3>
+      <span class="menu-item-price">
+        <%= number_to_currency(menu_item.price, unit: "$", precision: 2, locale: :en) %>
+      </span>
+    </div>
+
+    <% if menu_item.description.present? %>
+      <div class="menu-item-description"><%= simple_format(menu_item.description) %></div>
+    <% end %>
+
+    <% if menu_item.comment.present? %>
+      <div class="menu-item-comment"><%= simple_format(menu_item.comment) %></div>
+    <% end %>
+  </div>
+</div>

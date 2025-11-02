@@ -16,7 +16,7 @@ class Admin::LayoutsController < Admin::BaseController
   private
 
   def layout_params
-    params.require(:restaurant).permit(:menu_image_size, :menu_grid_columns, :message_of_the_day)
+    params.require(:restaurant).permit(:menu_image_size, :menu_grid_columns, :message_of_the_day, :menu_display_style)
   end
 
   def broadcast_layout_update

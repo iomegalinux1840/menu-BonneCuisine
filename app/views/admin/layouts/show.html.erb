@@ -20,6 +20,27 @@
       <% column_options = Restaurant::MENU_GRID_COLUMN_RANGE.map do |value|
            ["Grille #{value} colonnes", value]
          end %>
+      <% style_options = Restaurant::MENU_DISPLAY_STYLES.map do |style|
+           label = style == 'showcase' ? 'Style vitrine moderne' : 'Style liste classique'
+           description = style == 'showcase' ? "Grandes vignettes circulaires et bandeau latéral — idéal pour les écrans TV." : "Disposition compacte en colonnes — idéale pour afficher de nombreux plats sur une page."
+           { value: style, label: label, description: description }
+         end %>
+
+      <div class="form-group full-width">
+        <%= form.label :menu_display_style, "Style d'affichage", class: "form-label" %>
+        <div class="radio-group stacked">
+          <% style_options.each do |option| %>
+            <label class="radio-option">
+              <%= form.radio_button :menu_display_style, option[:value] %>
+              <div>
+                <strong><%= option[:label] %></strong>
+                <p><%= option[:description] %></p>
+              </div>
+            </label>
+          <% end %>
+        </div>
+        <small class="form-help">Choisissez la présentation générale de votre menu public.</small>
+      </div>
 
       <div class="form-group">
         <%= form.label :menu_image_size, "Taille des images", class: "form-label" %>

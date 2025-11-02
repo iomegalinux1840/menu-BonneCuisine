@@ -1,0 +1,32 @@
+<div class="showcase-menu-item"
+     data-menu-item-id="<%= menu_item.id %>">
+  <div class="showcase-menu-item__media">
+    <% if menu_item.image.attached? %>
+      <%= image_tag menu_item.image,
+                    alt: menu_item.name,
+                    class: "showcase-menu-item__image" %>
+    <% else %>
+      <div class="showcase-menu-item__placeholder" aria-hidden="true">🍽️</div>
+    <% end %>
+
+    <span class="showcase-menu-item__price">
+      <%= number_to_currency(menu_item.price, unit: "$", precision: 2, locale: :en) %>
+    </span>
+  </div>
+
+  <div class="showcase-menu-item__copy">
+    <h3 class="showcase-menu-item__name"><%= menu_item.name %></h3>
+
+    <% if menu_item.description.present? %>
+      <div class="showcase-menu-item__description">
+        <%= simple_format(menu_item.description) %>
+      </div>
+    <% end %>
+
+    <% if menu_item.comment.present? %>
+      <div class="showcase-menu-item__comment">
+        <%= simple_format(menu_item.comment) %>
+      </div>
+    <% end %>
+  </div>
+</div>
