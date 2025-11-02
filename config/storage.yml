@@ -1,6 +1,6 @@
 test:
   service: Disk
-  root: <%= Rails.root.join("tmp/storage") %>
+  root: <%= Rails.root.join("data/storage/test") %>
 
 local:
   service: Disk
@@ -8,9 +8,9 @@ local:
 
 production:
   service: Disk
-  root: <%= Rails.root.join("storage") %>
+  root: <%= Rails.root.join("data/storage/production") %>
 
 # Alternative configuration for Railway
 railway:
   service: Disk
-  root: <%= Rails.root.join("tmp/storage") %>
+  root: <%= Rails.root.join("data/storage/production") %>

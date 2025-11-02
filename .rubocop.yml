@@ -1,4 +1,4 @@
-require:
+plugins:
   - rubocop-rails
   - rubocop-rspec
   - rubocop-performance
@@ -42,7 +42,7 @@ Rails/FindEach:
   Severity: warning
 
 # Prevent N+1 queries
-Rails/EagerEvalLogMessage:
+Rails/EagerEvaluationLogMessage:
   Enabled: true
 
 # Security cops
@@ -93,7 +93,7 @@ Metrics/BlockLength:
     - 'config/environments/*'
 
 # Naming conventions
-Naming/PredicateName:
+Naming/PredicatePrefix:
   Enabled: true
 
 Naming/AccessorMethodName:
@@ -115,10 +115,6 @@ Lint/UselessAssignment:
 Lint/Void:
   Enabled: true
   Severity: error
-
-# Check for undefined methods (this would catch the authenticate issue)
-Lint/PossibleValues:
-  Enabled: true
 
 # RSpec configuration
 RSpec/ExampleLength:

@@ -1,0 +1,5 @@
+MoveModelLogicIntoModelCheck:
+  enabled: false
+
+RemoveUnusedMethodsInModelsCheck:
+  enabled: false

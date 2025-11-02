@@ -4,7 +4,6 @@ class Admin::LayoutsController < Admin::BaseController
 
   def update
     if @restaurant.update(layout_params)
-      broadcast_layout_update
       redirect_to restaurant_admin_layout_path(restaurant_slug: @restaurant.slug),
                   notice: 'Mise en page mise à jour avec succès.'
     else
@@ -17,11 +16,5 @@ class Admin::LayoutsController < Admin::BaseController
 
   def layout_params
     params.require(:restaurant).permit(:menu_image_size, :menu_grid_columns, :message_of_the_day, :menu_display_style)
-  end
-
-  def broadcast_layout_update
-    MenuChannel.broadcast_to(@restaurant, { action: 'refresh', source: 'layout' })
-  rescue => e
-    Rails.logger.warn "Layout broadcast failed: #{e.message}"
   end
 end

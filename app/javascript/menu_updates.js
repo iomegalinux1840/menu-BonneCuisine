@@ -95,7 +95,8 @@ function initializeMenuUpdates() {
       headers: {
         'Accept': 'application/json'
       },
-      credentials: 'same-origin'
+      credentials: 'same-origin',
+      cache: 'no-store'
     })
       .then(response => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`)
@@ -120,7 +121,7 @@ function initializeMenuUpdates() {
           body.dataset.menuSignature = nextSignature
         }
 
-        const grid = target.querySelector('.menu-grid')
+        const grid = target.querySelector('.menu-grid, .showcase-layout__grid')
         if (grid) {
           grid.classList.add('updating')
           setTimeout(() => grid.classList.remove('updating'), 300)

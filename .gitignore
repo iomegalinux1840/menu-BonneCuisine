@@ -31,6 +31,10 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
+# Ignore test storage artifacts
+/data/*
+!/data/.keep
+
 # Ignore database config for production
 /config/database.yml.production
 

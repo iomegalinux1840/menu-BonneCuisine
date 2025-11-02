@@ -44,6 +44,7 @@ class Restaurant < ApplicationRecord
 
   # Default values
   after_initialize :set_defaults, if: :new_record?
+  after_commit :broadcast_menu_layout_update, if: :menu_layout_changed?
 
   # Soft delete
   def soft_delete!
@@ -82,6 +83,19 @@ class Restaurant < ApplicationRecord
   end
 
   private
+
+  def menu_layout_changed?
+    saved_change_to_menu_image_size? ||
+      saved_change_to_menu_grid_columns? ||
+      saved_change_to_message_of_the_day? ||
+      saved_change_to_menu_display_style?
+  end
+
+  def broadcast_menu_layout_update
+    MenuChannel.broadcast_to(self, { action: "refresh", source: "layout" })
+  rescue StandardError => e
+    Rails.logger.warn "Layout broadcast failed: #{e.message}"
+  end
 
   def base_domain
     ENV.fetch('BASE_DOMAIN', 'menuplatform.app')

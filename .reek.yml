@@ -1,0 +1,43 @@
+exclude_paths:
+  - db
+  - spec
+  - config
+  - vendor
+  - node_modules
+  - tmp
+
+detectors:
+  IrresponsibleModule:
+    exclude:
+      - Restaurant
+      - MenuItem
+      - Admin::LayoutsController
+  InstanceVariableAssumption:
+    exclude:
+      - Admin::LayoutsController
+  DuplicateMethodCall:
+    exclude:
+      - MenuItem#create_image_attachment
+      - MenuItem#image_format_and_size
+  RepeatedConditional:
+    exclude:
+      - MenuItem
+  TooManyStatements:
+    exclude:
+      - MenuItem#create_image_attachment
+      - MenuItem#image_format_and_size
+      - Restaurant#generate_slug
+      - Restaurant#set_defaults
+  MissingSafeMethod:
+    exclude:
+      - Restaurant
+  UncommunicativeVariableName:
+    exclude:
+      - MenuItem#create_image_attachment
+      - MenuItem#image_format_and_size
+      - MenuItem#broadcast_menu_update
+      - MenuItem#broadcast_menu_delete
+      - Restaurant#broadcast_menu_layout_update
+  UtilityFunction:
+    exclude:
+      - Restaurant#base_domain

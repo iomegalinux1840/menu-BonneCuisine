@@ -27,8 +27,8 @@ class MenuItem < ApplicationRecord
   # Callbacks
   before_validation :set_position, on: :create
   before_save :handle_position_assignment
-  after_save :broadcast_menu_update
-  after_destroy :broadcast_menu_delete
+  after_commit :broadcast_menu_update, on: [:create, :update]
+  after_commit :broadcast_menu_delete, on: :destroy
 
   # Custom method to handle Active Storage attachment creation
   def create_image_attachment(file)
@@ -96,18 +96,21 @@ class MenuItem < ApplicationRecord
 
   def broadcast_menu_update
     broadcast_menu_refresh
-  rescue => e
+  rescue StandardError => e
     Rails.logger.warn "Broadcasting error: #{e.message}"
   end
 
   def broadcast_menu_delete
     broadcast_menu_refresh
-  rescue => e
+  rescue StandardError => e
     Rails.logger.warn "Broadcasting error: #{e.message}"
   end
 
   def broadcast_menu_refresh
-    MenuChannel.broadcast_to(restaurant, { action: 'refresh', source: 'menu_item' })
+    target_restaurant = restaurant || Restaurant.find_by(id: restaurant_id)
+    return unless target_restaurant
+
+    MenuChannel.broadcast_to(target_restaurant, { action: "refresh", source: "menu_item" })
   end
 
   def image_format_and_size

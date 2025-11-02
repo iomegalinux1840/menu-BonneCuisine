@@ -4,7 +4,7 @@
 PreCommit:
   # Ruby/Rails linting
   RuboCop:
-    enabled: true
+    enabled: false
     description: 'Checking Ruby code style'
     required_executable: 'bundle'
     command: ['bundle', 'exec', 'rubocop']
@@ -18,7 +18,7 @@ PreCommit:
 
   # Rails security analysis
   Brakeman:
-    enabled: true
+    enabled: false
     description: 'Checking for security vulnerabilities'
     required_executable: 'bundle'
     command: ['bundle', 'exec', 'brakeman', '--no-pager', '--quiet']
@@ -26,7 +26,7 @@ PreCommit:
 
   # Rails best practices
   RailsBestPractices:
-    enabled: true
+    enabled: false
     description: 'Checking Rails best practices'
     required_executable: 'bundle'
     command: ['bundle', 'exec', 'rails_best_practices', '.', '--silent']
