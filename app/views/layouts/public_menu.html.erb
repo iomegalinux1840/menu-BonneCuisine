@@ -92,9 +92,16 @@
   </head>
 
   <% menu_style = current_restaurant&.menu_display_style.presence || 'classic' %>
+  <% refresh_url =
+       if current_restaurant&.slug.present?
+         restaurant_menu_path(restaurant_slug: current_restaurant.slug, format: :json)
+       else
+         "#{request.path}.json"
+       end %>
+
   <body class="public-menu public-menu--<%= menu_style %>"
         data-restaurant-id="<%= current_restaurant&.id %>"
-        data-menu-refresh-url="<%= "#{request.path}.json" %>"
+        data-menu-refresh-url="<%= refresh_url %>"
         data-menu-signature="<%= @menu_signature %>"
         data-menu-refresh-interval="<%= @menu_refresh_interval %>">
     <!-- Main Content -->
