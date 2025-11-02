@@ -50,6 +50,7 @@ Rails.application.configure do
   config.action_cable.url = ENV.fetch('ACTION_CABLE_URL', '/cable')
   config.action_cable.allowed_request_origins = [
     'https://menu-bonnecuisine-production.up.railway.app',
+    'https://menu-resto.ca',
     'http://localhost:3000',
     /https:\/\/.*\.railway\.app/
   ]
