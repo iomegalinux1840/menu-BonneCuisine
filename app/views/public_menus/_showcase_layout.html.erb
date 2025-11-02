@@ -32,18 +32,14 @@
   </aside>
 
   <section class="showcase-layout__content" aria-labelledby="menu-title">
-    <header class="showcase-layout__header">
-      <h2 id="menu-title" class="showcase-layout__title">
-        <%= current_restaurant.name.presence || 'Notre carte' %>
-      </h2>
-      <p class="showcase-layout__subtext">
-        Découvrez notre sélection du jour — visualisée pour les écrans grand format.
-      </p>
-    </header>
+    <h2 id="menu-title" class="visually-hidden">
+      Menu de <%= current_restaurant.name.presence || 'Notre carte' %>
+    </h2>
 
     <div class="showcase-layout__grid image-<%= menu_layout[:image_size] %>"
          id="menu-grid"
-         data-columns="<%= menu_layout[:grid_columns] %>">
+         data-columns="<%= menu_layout[:grid_columns] %>"
+         style="--showcase-columns: <%= menu_layout[:grid_columns] %>">
       <%= render partial: "menu_items/menu_item",
                  collection: menu_items,
                  as: :menu_item,

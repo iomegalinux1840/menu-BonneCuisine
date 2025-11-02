@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_09_16_220000) do
+ActiveRecord::Schema[7.1].define(version: 2025_09_17_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -88,13 +88,39 @@ ActiveRecord::Schema[7.1].define(version: 2025_09_16_220000) do
     t.string "menu_image_size", default: "small", null: false
     t.integer "menu_grid_columns", default: 3, null: false
     t.text "message_of_the_day"
+    t.string "stripe_price_id"
+    t.string "stripe_product_id"
+    t.string "subscription_status"
+    t.string "menu_display_style", default: "showcase", null: false
     t.index ["custom_domain"], name: "index_restaurants_on_custom_domain", unique: true
+    t.index ["menu_display_style"], name: "index_restaurants_on_menu_display_style"
     t.index ["slug"], name: "index_restaurants_on_slug", unique: true
+    t.index ["stripe_price_id"], name: "index_restaurants_on_stripe_price_id"
     t.index ["subdomain"], name: "index_restaurants_on_subdomain", unique: true
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "restaurant_id", null: false
+    t.string "email"
+    t.string "stripe_customer_id"
+    t.string "stripe_subscription_id"
+    t.string "stripe_checkout_session_id", null: false
+    t.string "price_id"
+    t.string "status", default: "pending", null: false
+    t.datetime "current_period_end"
+    t.jsonb "metadata", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["restaurant_id"], name: "index_subscriptions_on_restaurant_id"
+    t.index ["status"], name: "index_subscriptions_on_status"
+    t.index ["stripe_checkout_session_id"], name: "index_subscriptions_on_stripe_checkout_session_id", unique: true
+    t.index ["stripe_customer_id"], name: "index_subscriptions_on_stripe_customer_id"
+    t.index ["stripe_subscription_id"], name: "index_subscriptions_on_stripe_subscription_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "admins", "restaurants"
   add_foreign_key "menu_items", "restaurants"
+  add_foreign_key "subscriptions", "restaurants"
 end

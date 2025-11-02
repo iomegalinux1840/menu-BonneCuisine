@@ -161,6 +161,18 @@ body.public-menu {
   }
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .public-menu--showcase .showcase-layout {
   display: grid;
   grid-template-columns: minmax(280px, 320px) 1fr;
@@ -188,12 +200,13 @@ body.public-menu {
   position: relative;
   z-index: 1;
   background: linear-gradient(180deg, #8ba046 0%, #627433 100%);
-  padding: 3rem 2.5rem;
+  padding: 2.6rem 2.2rem 2.4rem;
   color: #fff;
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
-  justify-content: space-between;
+  gap: 2rem;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .public-menu--showcase .showcase-brand-card {
@@ -201,19 +214,19 @@ body.public-menu {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 1.75rem;
+  gap: 1.5rem;
 }
 
 .public-menu--showcase .showcase-brand-card__logo {
-  width: 180px;
-  height: 180px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.25);
   display: grid;
   place-items: center;
   overflow: hidden;
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.28);
-  border: 4px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.28);
+  border: 3px solid rgba(255, 255, 255, 0.25);
 }
 
 .public-menu--showcase .showcase-brand-card__logo-image {
@@ -231,7 +244,7 @@ body.public-menu {
 .public-menu--showcase .showcase-brand-card__heading {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.35rem;
 }
 
 .public-menu--showcase .showcase-brand-card__eyebrow {
@@ -259,10 +272,10 @@ body.public-menu {
 }
 
 .public-menu--showcase .showcase-brand-card__message {
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-size: 0.9rem;
+  line-height: 1.5;
   color: rgba(255, 255, 255, 0.88);
-  max-width: 240px;
+  max-width: 220px;
 }
 
 .public-menu--showcase .showcase-brand-card__message p {
@@ -278,40 +291,19 @@ body.public-menu {
   z-index: 1;
   background: rgba(12, 15, 22, 0.75);
   backdrop-filter: blur(12px);
-  padding: 3.5rem 3rem;
+  padding: 2.4rem 2.6rem 2.6rem;
   color: #f8fafc;
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
-}
-
-.public-menu--showcase .showcase-layout__header {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
-
-.public-menu--showcase .showcase-layout__title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2rem, 3.6vw, 3rem);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #facc15;
-  margin: 0;
-}
-
-.public-menu--showcase .showcase-layout__subtext {
-  color: rgba(248, 250, 252, 0.7);
-  font-size: 1rem;
-  margin: 0 auto;
-  max-width: 520px;
+  gap: 1.8rem;
+  justify-content: flex-start;
 }
 
 .public-menu--showcase .showcase-layout__grid {
+  --showcase-columns: 3;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 2.5rem 2.2rem;
+  grid-template-columns: repeat(var(--showcase-columns), minmax(0, 1fr));
+  gap: 1.8rem 1.4rem;
   width: 100%;
   margin: 0 auto;
   padding: 0;
@@ -387,13 +379,19 @@ body.public-menu {
   color: inherit;
 }
 
+@media (max-width: 1400px) {
+  .public-menu--showcase .showcase-layout__grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
 @media (max-width: 1200px) {
   .public-menu--showcase .showcase-layout {
     grid-template-columns: minmax(240px, 280px) 1fr;
   }
 
   .public-menu--showcase .showcase-layout__content {
-    padding: 3rem 2.5rem;
+    padding: 2.2rem 2.2rem 2.6rem;
   }
 }
 
@@ -403,16 +401,16 @@ body.public-menu {
   }
 
   .public-menu--showcase .showcase-layout__branding {
-    padding: 2.5rem 2rem 2rem;
+    padding: 2.2rem 1.8rem 1.8rem;
     align-items: center;
   }
 
   .public-menu--showcase .showcase-layout__content {
-    padding: 2.5rem 2rem 3rem;
+    padding: 2rem 1.8rem 2.6rem;
   }
 
   .public-menu--showcase .showcase-layout__grid {
-    gap: 2rem;
+    gap: 1.6rem;
   }
 }
 
@@ -457,13 +455,8 @@ body.public-menu {
   }
 
   .public-menu--showcase .showcase-brand-card__logo {
-    width: 140px;
-    height: 140px;
-  }
-
-  .public-menu--showcase .showcase-layout__title {
-    letter-spacing: 0.12em;
-    font-size: 2.2rem;
+    width: 130px;
+    height: 130px;
   }
 }
 
@@ -788,23 +781,20 @@ body.public-menu {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 1.2rem;
+  gap: 0.85rem;
   color: #f8fafc;
-}
-
-.public-menu--showcase .showcase-menu-item {
-  padding: 1rem 0;
+  padding: 0.6rem 0;
 }
 
 .public-menu--showcase .showcase-menu-item__media {
   position: relative;
-  width: 165px;
-  height: 165px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.45);
-  border: 4px solid rgba(250, 204, 21, 0.4);
-  background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.2), rgba(30, 30, 30, 0.9));
+  box-shadow: 0 20px 38px rgba(0, 0, 0, 0.42);
+  border: 3px solid rgba(250, 204, 21, 0.45);
+  background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.22), rgba(30, 30, 30, 0.9));
   display: grid;
   place-items: center;
 }
@@ -840,14 +830,14 @@ body.public-menu {
 .public-menu--showcase .showcase-menu-item__copy {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.55rem;
 }
 
 .public-menu--showcase .showcase-menu-item__name {
   font-family: 'Playfair Display', serif;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 1.2rem;
+  font-size: 1.12rem;
   margin: 0;
   color: #fdfdfb;
   text-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
@@ -855,8 +845,8 @@ body.public-menu {
 
 .public-menu--showcase .showcase-menu-item__description,
 .public-menu--showcase .showcase-menu-item__comment {
-  font-size: 0.92rem;
-  line-height: 1.55;
+  font-size: 0.9rem;
+  line-height: 1.45;
   color: rgba(248, 250, 252, 0.78);
   margin: 0;
 }
