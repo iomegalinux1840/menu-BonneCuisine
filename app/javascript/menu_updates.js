@@ -91,9 +91,12 @@ function initializeMenuUpdates() {
     if (refreshing) return
     refreshing = true
 
-    fetch(refreshUrl, {
+    const requestUrl = buildRefreshUrl()
+
+    fetch(requestUrl, {
       headers: {
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Cache-Control': 'no-cache'
       },
       credentials: 'same-origin',
       cache: 'no-store'
@@ -133,6 +136,18 @@ function initializeMenuUpdates() {
       .finally(() => {
         refreshing = false
       })
+  }
+}
+
+function buildRefreshUrl() {
+  try {
+    const base = document.body?.dataset.menuRefreshUrl || "/"
+    const url = new URL(base, window.location.origin)
+    url.searchParams.set("_", Date.now().toString())
+    return url.toString()
+  } catch (error) {
+    console.warn("Unable to build refresh URL, falling back to base", error)
+    return document.body?.dataset.menuRefreshUrl || "/"
   }
 }
 
