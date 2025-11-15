@@ -20,6 +20,15 @@
       <% column_options = Restaurant::MENU_GRID_COLUMN_RANGE.map do |value|
            ["Grille #{value} colonnes", value]
          end %>
+      <% font_size_options = Restaurant::MENU_FONT_SIZES.map do |value|
+           label =
+             case value
+             when 'small' then 'Petite'
+             when 'large' then 'Grande'
+             else 'Normale'
+             end
+           ["Police #{label}", value]
+         end %>
       <% style_options = Restaurant::MENU_DISPLAY_STYLES.map do |style|
            label = style == 'showcase' ? 'Style vitrine moderne' : 'Style liste classique'
            description = style == 'showcase' ? "Grandes vignettes circulaires et bandeau latéral — idéal pour les écrans TV." : "Disposition compacte en colonnes — idéale pour afficher de nombreux plats sur une page."
@@ -54,6 +63,31 @@
         <%= form.select :menu_grid_columns, options_for_select(column_options, @restaurant.menu_grid_columns),
                         {}, class: "form-input" %>
         <small class="form-help">Choisissez comment les cartes de plats sont organisées. Le site reste responsive sur mobile.</small>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :menu_font_size, "Taille de la police", class: "form-label" %>
+        <%= form.select :menu_font_size, options_for_select(font_size_options, @restaurant.menu_font_size),
+                        {}, class: "form-input" %>
+        <small class="form-help">Ajuste la taille du texte dans la grille des plats (noms et descriptions).</small>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :menu_font_color, "Couleur du texte", class: "form-label" %>
+        <%= form.color_field :menu_font_color, class: "form-input" %>
+        <small class="form-help">Couleur utilisée pour les titres et descriptions des plats.</small>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :menu_accent_color, "Couleur d'accent", class: "form-label" %>
+        <%= form.color_field :menu_accent_color, class: "form-input" %>
+        <small class="form-help">Utilisée pour les prix et les éléments mis en évidence.</small>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :menu_background_color, "Couleur d'arrière-plan", class: "form-label" %>
+        <%= form.color_field :menu_background_color, class: "form-input" %>
+        <small class="form-help">Définit le fond de la page du menu.</small>
       </div>
 
       <div class="form-group full-width">

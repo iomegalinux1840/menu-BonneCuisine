@@ -20,6 +20,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    <% layout_settings = @menu_layout || current_restaurant&.layout_settings || {} %>
+    <% font_size_setting = layout_settings[:font_size].presence || 'medium' %>
+    <% menu_font_size_css =
+         case font_size_setting
+         when 'small' then '0.95rem'
+         when 'large' then '1.2rem'
+         else '1.05rem'
+         end %>
+    <% menu_font_color = layout_settings[:font_color].presence || '#F8FAFC' %>
+    <% menu_background_color = layout_settings[:background_color].presence || '#0F172A' %>
+    <% menu_accent_color = layout_settings[:accent_color].presence || '#FACC15' %>
+
     <% if @restaurant_branding[:font_family] == 'Playfair Display' %>
       <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
     <% else %>
@@ -31,18 +43,22 @@
         --primary-color: <%= @restaurant_branding[:primary_color] %>;
         --secondary-color: <%= @restaurant_branding[:secondary_color] %>;
         --font-family-heading: '<%= @restaurant_branding[:font_family] %>', serif;
+        --menu-font-color: <%= menu_font_color %>;
+        --menu-accent-color: <%= menu_accent_color %>;
+        --menu-background-color: <%= menu_background_color %>;
+        --menu-grid-font-size: <%= menu_font_size_css %>;
       }
 
       body.public-menu {
-        background: linear-gradient(135deg, #2B5797 0%, #4A7BC8 40%, #8AB6FF 100%);
+        background: <%= menu_background_color %>;
         min-height: 100vh;
-        color: #0f172a;
+        color: var(--menu-font-color);
         font-family: 'Source Sans Pro', sans-serif;
       }
 
       h1, h2, h3 {
         font-family: var(--font-family-heading);
-        color: #1e293b;
+        color: var(--menu-font-color);
       }
 
       .public-menu .restaurant-nav {
@@ -53,7 +69,7 @@
 
       .public-menu .restaurant-nav h1 {
         font-family: var(--font-family-heading);
-        color: #f8fafc;
+        color: var(--menu-font-color);
       }
 
       .public-menu .restaurant-container::before {
@@ -73,11 +89,11 @@
       }
 
       .public-menu .menu-item-name {
-        color: #f8fafc;
+        color: var(--menu-font-color);
       }
 
       .public-menu .menu-item-price {
-        color: #facc15;
+        color: var(--menu-accent-color);
         background: transparent;
         padding: 0;
         border-radius: 0;
@@ -87,6 +103,16 @@
         background: transparent;
         border: none;
         box-shadow: none;
+        color: var(--menu-font-color);
+      }
+
+      .public-menu .menu-item {
+        font-size: var(--menu-grid-font-size);
+        color: var(--menu-font-color);
+      }
+
+      .public-menu .menu-item-description p {
+        color: inherit;
       }
     </style>
   </head>

@@ -15,6 +15,15 @@ class Admin::LayoutsController < Admin::BaseController
   private
 
   def layout_params
-    params.require(:restaurant).permit(:menu_image_size, :menu_grid_columns, :message_of_the_day, :menu_display_style)
+    params.require(:restaurant).permit(
+      :menu_image_size,
+      :menu_grid_columns,
+      :message_of_the_day,
+      :menu_display_style,
+      :menu_font_size,
+      :menu_font_color,
+      :menu_background_color,
+      :menu_accent_color
+    )
   end
 end
