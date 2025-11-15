@@ -20,6 +20,9 @@
   --menu-accent-color: #facc15;
   --menu-background-color: #0f172a;
   --menu-grid-font-size: 1.05rem;
+  --menu-grid-heading-font-size: 1.1rem;
+  --menu-grid-price-font-size: 1rem;
+  --menu-grid-body-font-size: 0.95rem;
 }
 
 body {
@@ -824,7 +827,7 @@ body.public-menu {
   background: linear-gradient(135deg, #94d44b, #5aae2a);
   color: #0f172a;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: var(--menu-grid-price-font-size);
   padding: 0.4rem 0.95rem;
   border-radius: 999px;
   box-shadow: 0 12px 22px rgba(58, 158, 36, 0.45);
@@ -841,7 +844,7 @@ body.public-menu {
   font-family: 'Playfair Display', serif;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-size: 1.12rem;
+  font-size: var(--menu-grid-heading-font-size);
   margin: 0;
   color: #fdfdfb;
   text-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
@@ -849,7 +852,7 @@ body.public-menu {
 
 .public-menu--showcase .showcase-menu-item__description,
 .public-menu--showcase .showcase-menu-item__comment {
-  font-size: 0.9rem;
+  font-size: var(--menu-grid-body-font-size);
   line-height: 1.45;
   color: rgba(248, 250, 252, 0.78);
   margin: 0;
@@ -929,7 +932,7 @@ body.public-menu {
 
 .public-menu--classic .menu-item-name {
   font-family: 'Source Sans Pro', sans-serif;
-  font-size: 1.08rem;
+  font-size: var(--menu-grid-heading-font-size);
   color: #f8fafc;
   font-weight: 700;
   flex: 1;
@@ -939,7 +942,7 @@ body.public-menu {
 
 .public-menu--classic .menu-item-price {
   font-weight: 700;
-  font-size: 1rem;
+  font-size: var(--menu-grid-price-font-size);
   color: #facc15;
   white-space: nowrap;
   margin-left: auto;
@@ -947,7 +950,7 @@ body.public-menu {
 
 .public-menu--classic .menu-item-description,
 .public-menu--classic .menu-item-comment {
-  font-size: 0.9rem;
+  font-size: var(--menu-grid-body-font-size);
   line-height: 1.45;
   color: rgba(248, 250, 252, 0.8);
   margin: 0;
@@ -1556,12 +1559,12 @@ body.public-menu {
     }
   }
 
-  .menu-item-name {
-    font-size: 1.2rem;
+  .public-menu .menu-item-name {
+    font-size: calc(var(--menu-grid-heading-font-size) * 0.95);
   }
 
-  .menu-item-price {
-    font-size: 0.9rem;
+  .public-menu .menu-item-price {
+    font-size: calc(var(--menu-grid-price-font-size) * 0.95);
     padding: 0.3rem 0.8rem;
   }
 
@@ -1580,19 +1583,19 @@ body.public-menu {
     max-width: 1800px;
   }
 
-  .menu-item-name {
-    font-size: 1.8rem;
+  .public-menu .menu-item-name {
+    font-size: calc(var(--menu-grid-heading-font-size) * 1.25);
   }
 
-  .menu-item-price {
-    font-size: 1.5rem;
+  .public-menu .menu-item-price {
+    font-size: calc(var(--menu-grid-price-font-size) * 1.2);
   }
 
-  .menu-item-description {
-    font-size: 1.15rem;
+  .public-menu .menu-item-description {
+    font-size: calc(var(--menu-grid-body-font-size) * 1.15);
   }
 
-  .menu-item-comment {
-    font-size: 1rem;
+  .public-menu .menu-item-comment {
+    font-size: calc(var(--menu-grid-body-font-size) * 1.05);
   }
 }
