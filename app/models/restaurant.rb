@@ -173,5 +173,4 @@ class Restaurant < ApplicationRecord
     sanitized = "##{sanitized}" unless sanitized.start_with?('#')
     sanitized.upcase
   end
-  private_class_method :normalize_color_value
 end
